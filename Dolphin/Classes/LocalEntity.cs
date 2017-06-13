@@ -38,7 +38,7 @@ namespace Dolphin.Classes
         }
         public bool LocalEntity_isAlive()
         {
-            if (LocalEntity_Health < 2) // 1hp = dead
+            if (LocalEntity_Health <= 1)
                 return false;
             else
                 return true;
@@ -58,13 +58,12 @@ namespace Dolphin.Classes
                 float y = Mem.ReadFloat(LocalEntity_Base + m_vecOrigin + (0x4 * 1));
                 float z = Mem.ReadFloat(LocalEntity_Base + m_vecOrigin + (0x4 * 2));
 
-                SharpDX.Vector3 temp;
-
-                temp.X = x;
-                temp.Y = y;
-                temp.Z = z;
-
-                return temp;
+                return new SharpDX.Vector3()
+                {
+                    X = x,
+                    Y = y,
+                    Z = z
+                };
             }
         }
     }

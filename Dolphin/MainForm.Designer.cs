@@ -74,6 +74,7 @@
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.glowTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.teamBNumberBox)).BeginInit();
@@ -97,6 +98,7 @@
             this.tabControl1.Controls.Add(this.glowTab);
             this.tabControl1.Controls.Add(this.radarTab);
             this.tabControl1.Controls.Add(this.configTab);
+            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -649,6 +651,16 @@
             // 
             this.openFileDialog.FileName = "openFileDialog1";
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(394, 179);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -732,5 +744,6 @@
         public System.Windows.Forms.CheckBox glowEnabledEnemyCheckBox;
         public System.Windows.Forms.CheckBox glowEnabledTeamCheckBox;
         public System.Windows.Forms.Button teamColorPickButton;
+        private System.Windows.Forms.TabPage tabPage1;
     }
 }

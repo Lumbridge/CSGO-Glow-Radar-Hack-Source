@@ -1,14 +1,18 @@
-﻿using static hazedumper.netvars;
+﻿using Microsoft.VisualBasic.CompilerServices;
+using System.Runtime.CompilerServices;
+
+using static hazedumper.netvars;
 using static hazedumper.signatures;
 
 using static Dolphin.Classes.GlobalVariables;
 using static Dolphin.Classes.Geometry;
-using System.Drawing;
 
 namespace Dolphin.Classes
 {
     class Entity
     {
+        int m_Dormant = 0xE9;
+
         private int _Entity_Base;
 
         public Entity(int index)
@@ -19,6 +23,10 @@ namespace Dolphin.Classes
         {
             get { return _Entity_Base; }
             set { _Entity_Base = value; }
+        }
+        public bool Entity_IsDormant
+        {
+            get { return Conversions.ToBoolean(Operators.NotObject(RuntimeHelpers.GetObjectValue(Mem.ReadBool(Conversions.ToInteger(Operators.AddObject(Entity_Base, m_Dormant)))))); }
         }
         public int Entity_Health
         {
@@ -38,7 +46,7 @@ namespace Dolphin.Classes
         }
         public bool Entity_isAlive()
         {
-            if (Entity_Health < 2) // 1hp = dead
+            if (Entity_Health <= 1)
                 return false;
             else
                 return true;
@@ -58,13 +66,12 @@ namespace Dolphin.Classes
                 float y = Mem.ReadFloat(Entity_Base + m_vecOrigin + (0x4 * 1));
                 float z = Mem.ReadFloat(Entity_Base + m_vecOrigin + (0x4 * 2));
 
-                SharpDX.Vector3 temp;
-
-                temp.X = x;
-                temp.Y = y;
-                temp.Z = z;
-
-                return temp;
+                return new SharpDX.Vector3()
+                {
+                    X = x,
+                    Y = y,
+                    Z = z
+                };
             }
         }
     }

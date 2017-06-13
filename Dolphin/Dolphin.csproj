@@ -65,7 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\drawing2d.cs" />
+    <Compile Include="Classes\Drawing2D.cs" />
     <Compile Include="Classes\Entity.cs" />
     <Compile Include="Classes\Geometry.cs" />
     <Compile Include="Classes\GlobalVariables.cs" />

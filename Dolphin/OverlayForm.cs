@@ -7,7 +7,6 @@ using FontFactory = SharpDX.DirectWrite.Factory;
 using Format = SharpDX.DXGI.Format;
 using SharpDX;
 using System.Threading;
-using System.Diagnostics;
 
 using Dolphin.Classes;
 using static Dolphin.Classes.GlobalVariables;
@@ -122,7 +121,7 @@ namespace Dolphin
                     if(CurrentMapName != LastMapName)
                     {
                         LastMapName = CurrentMapName;
-                        MapImage = drawing2d.LoadFromFile(GlobalVariables.Device, MapInfo.getCurrentMapImage(CurrentMapName));
+                        MapImage = Drawing2D.LoadFromFile(GlobalVariables.Device, MapInfo.getCurrentMapImage(CurrentMapName));
                     }
                     
                     // radar bounds
@@ -136,7 +135,7 @@ namespace Dolphin
                     if (RadarEnabled)
                     {
                         GlobalVariables.Device.DrawBitmap(MapImage, radarBounds, RadarOpacity, BitmapInterpolationMode.Linear);
-                        GlobalVariables.Device.DrawRectangle(radarBounds, drawing2d.getBrush(Color.White, GlobalVariables.Device));
+                        GlobalVariables.Device.DrawRectangle(radarBounds, Drawing2D.getBrush(Color.White, GlobalVariables.Device));
                     }
 
                     // update viewmatrix
@@ -145,36 +144,44 @@ namespace Dolphin
                     // perform this loop for every entity
                     for (int i = 0; i < 64; i++)
                     {
+                        progress += 0.00001f;
+
                         Entity Entity = new Entity(i);
 
-                        if(GlowEnabledOpposition || GlowEnabledFriendly)
+                        if(Entity.Entity_Team != LE.LocalEntity_Team && Entity.Entity_isAlive())
+                        {
+                            Drawing2D.DrawESPBox(Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize), Entity.Entity_Position_W2S, Color.White, GlobalVariables.Device);
+                            Drawing2D.DrawSkeleton(Entity.Entity_BoneBase, Mem, ViewMatrix, WindowSize, GlobalVariables.Device, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)));
+                            Drawing2D.DrawShadowText(Entity.Entity_Position_W2S.X - 20, Entity.Entity_Position_W2S.Y, 12.0f, Color.Lime, ("❤ " + Entity.Entity_Health), GlobalVariables.Device, GlobalVariables.FontFactory, WindowSize);
+                        }
+
+                        if (GlowEnabledOpposition || GlowEnabledFriendly)
                         {
                             Glow.DoGlow(Mem, Entity, LE, progress);
-                            progress += 0.00001f;
                         }
 
                         // translate entity 3d coords into 2d radar coords
-                        Vector3 normalisedRadarPos = drawing2d.normaliseCoords((int)radarBounds.Left, (int)radarBounds.Right, (int)radarBounds.Top, (int)radarBounds.Bottom, MapInfo.getCurrentMapInfo(CurrentMapName), Entity.Entity_Position_3D);
+                        Vector3 normalisedRadarPos = Drawing2D.normaliseCoords((int)radarBounds.Left, (int)radarBounds.Right, (int)radarBounds.Top, (int)radarBounds.Bottom, MapInfo.getCurrentMapInfo(CurrentMapName), Entity.Entity_Position_3D);
                         
                         // draw radar blips
                         if (Entity.Entity_isAlive() && RadarEnabled)
                         {
                             if (Entity.Entity_Team != LE.LocalEntity_Team)
-                                drawing2d.DrawRadarBlip(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), RadarBlipSize, Color.Red, GlobalVariables.Device);
+                                Drawing2D.DrawRadarBlip(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), RadarBlipSize, Color.Red, GlobalVariables.Device);
                             else if (Entity.Entity_Base == LE.LocalEntity_Base)
                             {
-                                drawing2d.DrawRadarBlip(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), RadarBlipSize, Color.Yellow, GlobalVariables.Device);
-                                GlobalVariables.Device.DrawEllipse(new Ellipse(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), 50, 50), drawing2d.getBrush(Color.White, GlobalVariables.Device));
+                                Drawing2D.DrawRadarBlip(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), RadarBlipSize, Color.Yellow, GlobalVariables.Device);
+                                GlobalVariables.Device.DrawEllipse(new Ellipse(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), 50, 50), Drawing2D.getBrush(Color.White, GlobalVariables.Device));
                             }
                             else
-                                drawing2d.DrawRadarBlip(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), RadarBlipSize, Color.LimeGreen, GlobalVariables.Device);
+                                Drawing2D.DrawRadarBlip(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), RadarBlipSize, Color.LimeGreen, GlobalVariables.Device);
 
                             if (Entity.Entity_Team != LE.LocalEntity_Team)
                             {
                                 Vector2 posx = new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y);
                                 Vector2 posy = new Vector2(radarBounds.Right, radarBounds.Top + (i * 20));
-                                drawing2d.DrawLine(posx, posy, GlobalVariables.Device, Color.Red);
-                                drawing2d.DrawShadowText((int)posy.X, (int)posy.Y - 5, 20, Color.White, "HP: " + Entity.Entity_Health, GlobalVariables.Device, GlobalVariables.FontFactory, WindowBounds);
+                                Drawing2D.DrawLine(posx, posy, GlobalVariables.Device, Color.Red);
+                                Drawing2D.DrawShadowText(posy.X, posy.Y - 5, 20, Color.White, "HP: " + Entity.Entity_Health, GlobalVariables.Device, GlobalVariables.FontFactory, WindowSize);
                             }
                         }
                     }

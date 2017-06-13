@@ -63,8 +63,6 @@ namespace Dolphin.Classes
         }
         public static void DoGlow(ProcessMemory Mem, Entity cEntity, LocalEntity cLocalEntity, float rainbowProgress)
         {
-            int m_Dormant = 0xE9;
-
             if(RainbowEnabledOpposition)
             {
                 GlowEnemyARGB = Rainbow(rainbowProgress);
@@ -112,7 +110,7 @@ namespace Dolphin.Classes
             };
             if (GlowEnabledOpposition | GlowEnabledFriendly)
             {
-                if (Conversions.ToBoolean(Operators.NotObject(RuntimeHelpers.GetObjectValue(Mem.ReadBool(Conversions.ToInteger(Operators.AddObject(cEntity.Entity_Base, m_Dormant)))))))
+                if (cEntity.Entity_isAlive() && cEntity.Entity_IsDormant)
                 {
                     object right = Mem.ReadInt(cEntity.Entity_Base + m_iTeamNum);
                     if (cEntity.Entity_Team == cLocalEntity.LocalEntity_Team)

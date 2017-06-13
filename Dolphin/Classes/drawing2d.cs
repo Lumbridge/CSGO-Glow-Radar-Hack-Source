@@ -6,16 +6,35 @@ using static Dolphin.Classes.Skeleton;
 
 namespace Dolphin.Classes
 {
-    class drawing2d
+    class Drawing2D
     {
+        /// <summary>
+        /// Converts a system.drawing.color to a sharpdx color
+        /// </summary>
+        /// <param name="inColor"></param>
+        /// <returns></returns>
+        public static Color SystemColorToSharpColor(System.Drawing.Color inColor)
+        {
+            return Color.FromBgra(inColor.ToArgb());
+        }
+
+        /// <summary>
+        /// Normalises coordinates between a smaller range I.E. Takes XY 3D player coordinates and scales them into the boundaries of the radar
+        /// </summary>
+        /// <param name="minDX"></param>
+        /// <param name="maxDX"></param>
+        /// <param name="minDY"></param>
+        /// <param name="maxDY"></param>
+        /// <param name="m"></param>
+        /// <param name="originalPos"></param>
+        /// <returns></returns>
         public static Vector3 normaliseCoords(int minDX, int maxDX, int minDY, int maxDY, MapInfo.map m, Vector3 originalPos)
         {
-            Vector3 norm = new Vector3();
-
-            norm.X = minDX + (originalPos.X - m.topLeft.X) * (maxDX - minDX) / (m.bottomRight.X - m.topLeft.X);
-            norm.Y = minDY + (originalPos.Y - m.topLeft.Y) * (maxDY - minDY) / (m.bottomRight.Y - m.topLeft.Y);
-
-            return norm;
+            return new Vector3()
+            {
+                X = minDX + (originalPos.X - m.topLeft.X) * (maxDX - minDX) / (m.bottomRight.X - m.topLeft.X),
+                Y = minDY + (originalPos.Y - m.topLeft.Y) * (maxDY - minDY) / (m.bottomRight.Y - m.topLeft.Y)
+            };
         }
 
         /// <summary>
@@ -34,14 +53,14 @@ namespace Dolphin.Classes
                     System.Drawing.Imaging.ImageLockMode.ReadOnly,
                     System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
 
-            SharpDX.DataStream stream = new SharpDX.DataStream(bmpData.Scan0, bmpData.Stride * bmpData.Height, true, false);
-            SharpDX.Direct2D1.PixelFormat pFormat = new SharpDX.Direct2D1.PixelFormat(SharpDX.DXGI.Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
-            SharpDX.Direct2D1.BitmapProperties bmpProps = new SharpDX.Direct2D1.BitmapProperties(pFormat);
+            DataStream stream = new SharpDX.DataStream(bmpData.Scan0, bmpData.Stride * bmpData.Height, true, false);
+            PixelFormat pFormat = new PixelFormat(SharpDX.DXGI.Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied);
+            BitmapProperties bmpProps = new BitmapProperties(pFormat);
 
-            SharpDX.Direct2D1.Bitmap result =
-                new SharpDX.Direct2D1.Bitmap(
+            Bitmap result =
+                new Bitmap(
                     m_renderTarget,
-                    new SharpDX.Size2(bmp.Width, bmp.Height),
+                    new Size2(bmp.Width, bmp.Height),
                     stream,
                     bmpData.Stride,
                     bmpProps);
@@ -70,14 +89,14 @@ namespace Dolphin.Classes
                     System.Drawing.Imaging.ImageLockMode.ReadOnly,
                     System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
 
-            SharpDX.DataStream stream = new SharpDX.DataStream(bmpData.Scan0, bmpData.Stride * bmpData.Height, true, false);
-            SharpDX.Direct2D1.PixelFormat pFormat = new SharpDX.Direct2D1.PixelFormat(SharpDX.DXGI.Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
-            SharpDX.Direct2D1.BitmapProperties bmpProps = new SharpDX.Direct2D1.BitmapProperties(pFormat);
+            DataStream stream = new DataStream(bmpData.Scan0, bmpData.Stride * bmpData.Height, true, false);
+            PixelFormat pFormat = new PixelFormat(SharpDX.DXGI.Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied);
+            BitmapProperties bmpProps = new BitmapProperties(pFormat);
 
-            SharpDX.Direct2D1.Bitmap result =
-                new SharpDX.Direct2D1.Bitmap(
+            Bitmap result =
+                new Bitmap(
                     m_renderTarget,
-                    new SharpDX.Size2(bmp.Width, bmp.Height),
+                    new Size2(bmp.Width, bmp.Height),
                     stream,
                     bmpData.Stride,
                     bmpProps);
@@ -90,34 +109,60 @@ namespace Dolphin.Classes
             return result;
         }
 
+        /// <summary>
+        /// Draws a line between point 1 and point 2
+        /// </summary>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <param name="device"></param>
+        /// <param name="color"></param>
         public static void DrawLine(Vector2 p1, Vector2 p2, WindowRenderTarget device, Color color)
         {
             device.DrawLine(p1, p2, getBrush(color, device));
         }
 
+        /// <summary>
+        /// Draws a blip on the radar of using passed in position and size
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="radius"></param>
+        /// <param name="color"></param>
+        /// <param name="device"></param>
         public static void DrawRadarBlip(Vector2 pos, int radius, Color color, WindowRenderTarget device)
         {
             device.DrawEllipse(new Ellipse(pos, radius, radius), getBrush(color, device));
             device.DrawEllipse(new Ellipse(pos, radius / 5, radius / 5), getBrush(Color.White, device));
         }
 
+        /// <summary>
+        /// Returns a brush object
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="device"></param>
+        /// <returns></returns>
         public static SolidColorBrush getBrush(Color color, WindowRenderTarget device)
         {
             return new SolidColorBrush(device, color);
         }
 
-        public static SolidColorBrush getTransparentBrush(Color color, WindowRenderTarget device, float opacity)
-        {
-            return new SolidColorBrush(device, color) { Opacity = opacity };
-        }
-
-        public static void DrawShadowText(int x, int y, float fontSize, Color fontColour, string text, WindowRenderTarget device, FontFactory fontFactory, Rectangle screenPos)
+        /// <summary>
+        /// Draws text with a black outline
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="fontSize"></param>
+        /// <param name="fontColour"></param>
+        /// <param name="text"></param>
+        /// <param name="device"></param>
+        /// <param name="fontFactory"></param>
+        /// <param name="screenSize"></param>
+        public static void DrawShadowText(float x, float y, float fontSize, Color fontColour, string text, WindowRenderTarget device, FontFactory fontFactory, Size2 screenSize)
         {
             string fontFamily = "Arial";
 
             SolidColorBrush textBrush = new SolidColorBrush(device, Color.Black);
             TextFormat textFormat = new TextFormat(fontFactory, fontFamily, fontSize);
-            TextLayout textLayout = new TextLayout(fontFactory, text, textFormat, screenPos.Width, screenPos.Height);
+            TextLayout textLayout = new TextLayout(fontFactory, text, textFormat, screenSize.Width, screenSize.Height);
 
             //black
             device.DrawTextLayout(new Vector2(x - 1, y + 1), textLayout, textBrush);
@@ -130,22 +175,43 @@ namespace Dolphin.Classes
             device.DrawTextLayout(new Vector2(x, y), textLayout, textBrush);
         }
 
+        /// <summary>
+        /// Draws a box around an entity
+        /// </summary>
+        /// <param name="headPos"></param>
+        /// <param name="feetPos"></param>
+        /// <param name="color"></param>
+        /// <param name="device"></param>
         public static void DrawESPBox(Vector2 headPos, Vector2 feetPos, Color color, WindowRenderTarget device)
         {
-            int height = (int)(feetPos.Y - headPos.Y);
+            float height = (feetPos.Y - headPos.Y);
+            float width = height * (45.0f / 80.0f);
 
             device.DrawRectangle(new SharpDX.Mathematics.Interop.RawRectangleF()
             {
-                Top = headPos.Y,
-                Bottom = feetPos.Y - 5,
-                Left = feetPos.X - (height/2 - 2),
-                Right = feetPos.X + (height/2 - 2)
-            }, getBrush(color,device));
+                Top = headPos.Y - 10.0f,
+                Bottom = feetPos.Y,
+                Left = feetPos.X - width / 2.0f,
+                Right = feetPos.X + width / 2.0f
+            }, getBrush(color, device));
         }
 
+        /// <summary>
+        /// Draws an entity's skeleton
+        /// </summary>
+        /// <param name="BoneBase"></param>
+        /// <param name="Mem"></param>
+        /// <param name="viewmatrix"></param>
+        /// <param name="screenSize"></param>
+        /// <param name="device"></param>
+        /// <param name="color"></param>
         public static void DrawSkeleton(int BoneBase, ProcessMemory Mem, Matrix4x4 viewmatrix, Size2 screenSize, WindowRenderTarget device, Color color)
         {
             #region left arm
+            //left shoulder to spine
+            DrawLine(GetW2SBone(BoneBase, Bone.Left_Shoulder, Mem, viewmatrix, screenSize),
+            GetW2SBone(BoneBase, Bone.Spine5, Mem, viewmatrix, screenSize),
+            device, color);
             //left shoulder to left elbow
             DrawLine(GetW2SBone(BoneBase, Bone.Left_Shoulder, Mem, viewmatrix, screenSize),
             GetW2SBone(BoneBase, Bone.Left_Elbow, Mem, viewmatrix, screenSize),
@@ -157,6 +223,10 @@ namespace Dolphin.Classes
             #endregion
 
             #region right arm
+            //right shoulder to spine
+            DrawLine(GetW2SBone(BoneBase, Bone.Right_Shoulder, Mem, viewmatrix, screenSize),
+            GetW2SBone(BoneBase, Bone.Spine5, Mem, viewmatrix, screenSize),
+            device, color);
             //right shoulder to right elbow
             DrawLine(GetW2SBone(BoneBase, Bone.Right_Shoulder, Mem, viewmatrix, screenSize),
             GetW2SBone(BoneBase, Bone.Right_Elbow, Mem, viewmatrix, screenSize),
@@ -223,19 +293,6 @@ namespace Dolphin.Classes
             GetW2SBone(BoneBase, Bone.Head, Mem, viewmatrix, screenSize),
             device, color);
             #endregion
-        }
-
-        public static void DrawESPBox(Vector2[] points, Color color, WindowRenderTarget device)
-        {
-            //int height = (int)(feetPos.Y - headPos.Y);
-
-            device.DrawRectangle(new SharpDX.Mathematics.Interop.RawRectangleF()
-            {
-                Top = points[0].Y,
-                Bottom = points[2].Y,
-                Left = points[0].X,
-                Right = points[2].X
-            }, getBrush(color, device));
         }
     }
 }
