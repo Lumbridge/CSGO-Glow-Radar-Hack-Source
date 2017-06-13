@@ -9,7 +9,7 @@ using static Dolphin.Classes.Geometry;
 
 namespace Dolphin.Classes
 {
-    class Entity
+    public class Entity
     {
         int m_Dormant = 0xE9;
 
@@ -23,6 +23,14 @@ namespace Dolphin.Classes
         {
             get { return _Entity_Base; }
             set { _Entity_Base = value; }
+        }
+        public int Entity_Model_Base
+        {
+            get { return Mem.ReadInt(Entity_Base + 0x6C); }
+        }
+        public string Entity_Model_Name
+        {
+            get { return Mem.ReadStringAscii(Entity_Model_Base + 0x4, 64); }
         }
         public bool Entity_IsDormant
         {
@@ -46,7 +54,7 @@ namespace Dolphin.Classes
         }
         public bool Entity_isAlive()
         {
-            if (Entity_Health <= 1)
+            if (Entity_Health < 1)
                 return false;
             else
                 return true;

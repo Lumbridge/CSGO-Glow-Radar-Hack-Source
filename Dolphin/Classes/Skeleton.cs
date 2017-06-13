@@ -1,9 +1,4 @@
 ﻿using SharpDX;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dolphin.Classes
 {
@@ -11,13 +6,22 @@ namespace Dolphin.Classes
     {
         public static Vector3 GetBone(int BoneBase, Bone BoneID, ProcessMemory Mem)
         {
-            Vector3 bonePos;
+            return new Vector3()
+            {
+                X = Mem.ReadFloat(BoneBase + 0x30 * (int)BoneID + 0x0c),
+                Y = Mem.ReadFloat(BoneBase + 0x30 * (int)BoneID + 0x1c),
+                Z = Mem.ReadFloat(BoneBase + 0x30 * (int)BoneID + 0x2c)
+            };
+        }
 
-            bonePos.X = Mem.ReadFloat(BoneBase + 0x30 * (int)BoneID + 0x0c); //x
-            bonePos.Y = Mem.ReadFloat(BoneBase + 0x30 * (int)BoneID + 0x1c); //y
-            bonePos.Z = Mem.ReadFloat(BoneBase + 0x30 * (int)BoneID + 0x2c); //z
-
-            return bonePos;
+        public static Vector3 GetBone(int BoneBase, int BoneID, ProcessMemory Mem)
+        {
+            return new Vector3()
+            {
+                X = Mem.ReadFloat(BoneBase + 0x30 * BoneID + 0x0c),
+                Y = Mem.ReadFloat(BoneBase + 0x30 * BoneID + 0x1c),
+                Z = Mem.ReadFloat(BoneBase + 0x30 * BoneID + 0x2c)
+            };
         }
 
         public static Vector2 GetW2SBone(int BoneBase, Bone BoneID, ProcessMemory Mem, Matrix4x4 viewmatrix, Size2 screenSize)
@@ -27,12 +31,20 @@ namespace Dolphin.Classes
             bonePos.Y = Mem.ReadFloat(BoneBase + 0x30 * (int)BoneID + 0x1c); //y
             bonePos.Z = Mem.ReadFloat(BoneBase + 0x30 * (int)BoneID + 0x2c); //z
 
-            Vector2 bonePosW2S;
-
-            bonePosW2S = Classes.Geometry.WorldToScreen(viewmatrix, screenSize, bonePos);
-            return bonePosW2S;
+            return Geometry.WorldToScreen(viewmatrix, screenSize, bonePos);
         }
 
+        public static Vector2 GetW2SBone(int BoneBase, int BoneID, ProcessMemory Mem, Matrix4x4 viewmatrix, Size2 screenSize)
+        {
+            Vector3 bonePos;
+            bonePos.X = Mem.ReadFloat(BoneBase + 0x30 * BoneID + 0x0c); //x
+            bonePos.Y = Mem.ReadFloat(BoneBase + 0x30 * BoneID + 0x1c); //y
+            bonePos.Z = Mem.ReadFloat(BoneBase + 0x30 * BoneID + 0x2c); //z
+
+            return Geometry.WorldToScreen(viewmatrix, screenSize, bonePos);
+        }
+
+        // this only works for specific CT model... (may be removed)
         public enum Bone
         {
             Spine1 = 0,

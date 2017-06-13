@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualBasic.CompilerServices;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using static Dolphin.Classes.GlobalVariables;
 
 using static hazedumper.signatures;

@@ -16,6 +16,8 @@ namespace Dolphin.Classes
     {
         public static bool IsRunning = false;
         
+        public static List<Entity> Entities = new List<Entity>();
+
         #region radar stuff
         public static bool RadarEnabled;
         public static int RadarSize, RadarBlipSize;
@@ -35,6 +37,20 @@ namespace Dolphin.Classes
         public static int GlowFriendlyR = 0;
         public static int GlowFriendlyG = 255;
         public static int GlowFriendlyB = 0;
+        #endregion
+
+        #region ESP variables
+        public static bool BoxESPEnabledFriendly, BoxESPEnabledOpposition;
+        public static bool SkeletonsEnabledFriendly, SkeletonsEnabledOpposition;
+        public static bool RainbowESPEnabledFriendly, RainbowESPEnabledOpposition;
+        public static System.Drawing.Color ESPEnemyARGB, ESPTeamARGB;
+        public static int ESPAlpha = 255;
+        public static int ESPOppositionR = 255;
+        public static int ESPOppositionG = 0;
+        public static int ESPOppositionB = 0;
+        public static int ESPFriendlyR = 0;
+        public static int ESPFriendlyG = 255;
+        public static int ESPFriendlyB = 0;
         #endregion
 
         #region Overlay Form Stuff
@@ -143,19 +159,34 @@ namespace Dolphin.Classes
             return (
                 "====GLOW OPTIONS====" + Environment.NewLine +
                 "GLOW_ENABLED_TEAM=" + GlowEnabledFriendly + Environment.NewLine +
-                "TEAM_R=" + GlowFriendlyR + Environment.NewLine +
-                "TEAM_G=" + GlowFriendlyG + Environment.NewLine +
-                "TEAM_B=" + GlowFriendlyB + Environment.NewLine +
-                "TEAM_ARGB=" + GlowTeamARGB.ToArgb() + Environment.NewLine +
-                "RAINBOW_ENABLED_TEAM=" + RainbowEnabledFriendly + Environment.NewLine +
-                "COLOUR_BASED_ON_HP_TEAM=" + HPToColourEnabledFriendly + Environment.NewLine +
+                "GLOW_TEAM_R=" + GlowFriendlyR + Environment.NewLine +
+                "GLOW_TEAM_G=" + GlowFriendlyG + Environment.NewLine +
+                "GLOW_TEAM_B=" + GlowFriendlyB + Environment.NewLine +
+                "GLOW_TEAM_ARGB=" + GlowTeamARGB.ToArgb() + Environment.NewLine +
+                "GLOW_RAINBOW_ENABLED_TEAM=" + RainbowEnabledFriendly + Environment.NewLine +
+                "GLOW_COLOUR_BASED_ON_HP_TEAM=" + HPToColourEnabledFriendly + Environment.NewLine +
                 "GLOW_ENABLED_ENEMY=" + GlowEnabledOpposition + Environment.NewLine +
-                "ENEMY_R=" + GlowOppositionR + Environment.NewLine +
-                "ENEMY_G=" + GlowOppositionG + Environment.NewLine +
-                "ENEMY_B=" + GlowOppositionB + Environment.NewLine +
-                "ENEMY_ARGB=" + GlowEnemyARGB.ToArgb() + Environment.NewLine +
-                "RAINBOW_ENABLED_ENEMY=" + RainbowEnabledOpposition + Environment.NewLine +
-                "COLOR_BASED_ON_HP_ENEMY=" + HPToColourEnabledOpposition + Environment.NewLine +
+                "GLOW_ENEMY_R=" + GlowOppositionR + Environment.NewLine +
+                "GLOW_ENEMY_G=" + GlowOppositionG + Environment.NewLine +
+                "GLOW_ENEMY_B=" + GlowOppositionB + Environment.NewLine +
+                "GLOW_ENEMY_ARGB=" + GlowEnemyARGB.ToArgb() + Environment.NewLine +
+                "GLOW_RAINBOW_ENABLED_ENEMY=" + RainbowEnabledOpposition + Environment.NewLine +
+                "GLOW_COLOR_BASED_ON_HP_ENEMY=" + HPToColourEnabledOpposition + Environment.NewLine +
+                "====ESP OPTIONS====" + Environment.NewLine +
+                "BOX_ESP_ENABLED_TEAM=" + BoxESPEnabledFriendly + Environment.NewLine +
+                "SKELETONS_ENABLED_TEAM=" + SkeletonsEnabledFriendly + Environment.NewLine +
+                "RAINBOW_ESP_ENABLED_TEAM=" + RainbowEnabledFriendly + Environment.NewLine +
+                "ESP_TEAM_R=" + ESPFriendlyR + Environment.NewLine +
+                "ESP_TEAM_G=" + ESPFriendlyG + Environment.NewLine +
+                "ESP_TEAM_B=" + ESPFriendlyB + Environment.NewLine +
+                "ESP_TEAM_ARGB=" + ESPTeamARGB.ToArgb() + Environment.NewLine +
+                "BOX_ESP_ENABLED_ENEMY=" + BoxESPEnabledOpposition + Environment.NewLine +
+                "SKELETONS_ENABLED_ENEMY=" + SkeletonsEnabledOpposition + Environment.NewLine +
+                "RAINBOW_ESP_ENABLED_ENEMY=" + RainbowEnabledOpposition + Environment.NewLine +
+                "ESP_ENEMY_R=" + ESPOppositionR + Environment.NewLine +
+                "ESP_ENEMY_G=" + ESPOppositionG + Environment.NewLine +
+                "ESP_ENEMY_B=" + ESPOppositionB + Environment.NewLine +
+                "ESP_ENEMY_ARGB=" + ESPEnemyARGB.ToArgb() + Environment.NewLine +
                 "====RADAR OPTIONS====" + Environment.NewLine +
                 "RADAR_ENABLED=" + RadarEnabled + Environment.NewLine +
                 "RADAR_SIZE=" + RadarSize + Environment.NewLine +
@@ -201,6 +232,24 @@ namespace Dolphin.Classes
             GlowEnemyARGB = System.Drawing.Color.FromArgb(int.Parse(results[11]));
             RainbowEnabledOpposition = bool.Parse(results[12]);
             HPToColourEnabledOpposition = bool.Parse(results[13]);
+
+            // team esp options
+            BoxESPEnabledFriendly = bool.Parse(results[14]);
+            SkeletonsEnabledFriendly = bool.Parse(results[15]);
+            RainbowESPEnabledFriendly = bool.Parse(results[16]);
+            ESPFriendlyR = int.Parse(results[17]);
+            ESPFriendlyG = int.Parse(results[18]);
+            ESPFriendlyB = int.Parse(results[19]);
+            ESPTeamARGB = System.Drawing.Color.FromArgb(int.Parse(results[20]));
+
+            // enemy esp options
+            BoxESPEnabledOpposition = bool.Parse(results[21]);
+            SkeletonsEnabledOpposition = bool.Parse(results[22]);
+            RainbowESPEnabledOpposition = bool.Parse(results[23]);
+            ESPOppositionR = int.Parse(results[24]);
+            ESPOppositionG = int.Parse(results[25]);
+            ESPOppositionB = int.Parse(results[26]);
+            ESPEnemyARGB = System.Drawing.Color.FromArgb(int.Parse(results[27]));
 
             // radar options
             RadarEnabled = bool.Parse(results[14]);

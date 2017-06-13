@@ -196,6 +196,15 @@ namespace Dolphin.Classes
             }, getBrush(color, device));
         }
 
+        public static void DrawBone(Entity entity, int bone1, int bone2, Color color)
+        {
+            DrawLine(
+                GetW2SBone(entity.Entity_BoneBase, bone1, GlobalVariables.Mem, GlobalVariables.ViewMatrix, GlobalVariables.WindowSize),
+                GetW2SBone(entity.Entity_BoneBase, bone2, GlobalVariables.Mem, GlobalVariables.ViewMatrix, GlobalVariables.WindowSize),
+                GlobalVariables.Device,
+                color);
+        }
+
         /// <summary>
         /// Draws an entity's skeleton
         /// </summary>
@@ -205,94 +214,237 @@ namespace Dolphin.Classes
         /// <param name="screenSize"></param>
         /// <param name="device"></param>
         /// <param name="color"></param>
-        public static void DrawSkeleton(int BoneBase, ProcessMemory Mem, Matrix4x4 viewmatrix, Size2 screenSize, WindowRenderTarget device, Color color)
+        public static void DrawSkeleton(Entity entity, Color color)
         {
-            #region left arm
-            //left shoulder to spine
-            DrawLine(GetW2SBone(BoneBase, Bone.Left_Shoulder, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Spine5, Mem, viewmatrix, screenSize),
-            device, color);
-            //left shoulder to left elbow
-            DrawLine(GetW2SBone(BoneBase, Bone.Left_Shoulder, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Left_Elbow, Mem, viewmatrix, screenSize),
-            device, color);
-            //left elbow to left hand
-            DrawLine(GetW2SBone(BoneBase, Bone.Left_Elbow, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Left_Hand, Mem, viewmatrix, screenSize),
-            device, color);
-            #endregion
+            if (entity.Entity_Model_Name.Contains("tm_separatist"))
+            {
+                DrawBone(entity, 67, 66, color);
+                DrawBone(entity, 66, 0, color);
+                DrawBone(entity, 0, 73, color);
+                DrawBone(entity, 73, 74, color);
 
-            #region right arm
-            //right shoulder to spine
-            DrawLine(GetW2SBone(BoneBase, Bone.Right_Shoulder, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Spine5, Mem, viewmatrix, screenSize),
-            device, color);
-            //right shoulder to right elbow
-            DrawLine(GetW2SBone(BoneBase, Bone.Right_Shoulder, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Right_Elbow, Mem, viewmatrix, screenSize),
-            device, color);
-            //right elbow to right hand
-            DrawLine(GetW2SBone(BoneBase, Bone.Right_Elbow, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Right_Hand, Mem, viewmatrix, screenSize),
-            device, color);
-            #endregion
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
 
-            #region left leg
-            //left hip to spine
-            DrawLine(GetW2SBone(BoneBase, Bone.Left_Hip, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Spine1, Mem, viewmatrix, screenSize),
-            device, color);
-            //left hip to left knee
-            DrawLine(GetW2SBone(BoneBase, Bone.Left_Hip, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Left_Knee, Mem, viewmatrix, screenSize),
-            device, color);
-            //left knee to left foot
-            DrawLine(GetW2SBone(BoneBase, Bone.Left_Knee, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Left_Foot, Mem, viewmatrix, screenSize),
-            device, color);
-            #endregion
+                DrawBone(entity, 7, 10, color);
+                DrawBone(entity, 10, 11, color);
+                DrawBone(entity, 11, 12, color);
 
-            #region right leg
-            //left hip to spine
-            DrawLine(GetW2SBone(BoneBase, Bone.Right_Hip, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Spine1, Mem, viewmatrix, screenSize),
-            device, color);
-            //right hip to right knee
-            DrawLine(GetW2SBone(BoneBase, Bone.Right_Hip, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Right_Knee, Mem, viewmatrix, screenSize),
-            device, color);
-            //right knee to right foot
-            DrawLine(GetW2SBone(BoneBase, Bone.Right_Knee, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Right_Foot, Mem, viewmatrix, screenSize),
-            device, color);
-            #endregion
+                DrawBone(entity, 7, 38, color);
+                DrawBone(entity, 38, 39, color);
+                DrawBone(entity, 39, 40, color);
+            }
+            else if (entity.Entity_Model_Name.Contains("tm_leet"))
+            {
+                DrawBone(entity, 67, 66, color);
+                DrawBone(entity, 66, 0, color);
+                DrawBone(entity, 0, 73, color);
+                DrawBone(entity, 73, 74, color);
 
-            #region spine
-            //1 - 2
-            DrawLine(GetW2SBone(BoneBase, Bone.Spine1, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Spine2, Mem, viewmatrix, screenSize),
-            device, color);
-            //2 - 3
-            DrawLine(GetW2SBone(BoneBase, Bone.Spine2, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Spine3, Mem, viewmatrix, screenSize),
-            device, color);
-            //3 - 4
-            DrawLine(GetW2SBone(BoneBase, Bone.Spine3, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Spine4, Mem, viewmatrix, screenSize),
-            device, color);
-            //4 - 5
-            DrawLine(GetW2SBone(BoneBase, Bone.Spine4, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Spine5, Mem, viewmatrix, screenSize),
-            device, color);
-            //5 - neck
-            DrawLine(GetW2SBone(BoneBase, Bone.Spine5, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Neck, Mem, viewmatrix, screenSize),
-            device, color);
-            //neck - head
-            DrawLine(GetW2SBone(BoneBase, Bone.Neck, Mem, viewmatrix, screenSize),
-            GetW2SBone(BoneBase, Bone.Head, Mem, viewmatrix, screenSize),
-            device, color);
-            #endregion
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
+
+                DrawBone(entity, 7, 10, color);
+                DrawBone(entity, 10, 11, color);
+                DrawBone(entity, 11, 12, color);
+
+                DrawBone(entity, 7, 38, color);
+                DrawBone(entity, 38, 39, color);
+                DrawBone(entity, 39, 40, color);
+            }
+            else if (entity.Entity_Model_Name.Contains("tm_phoenix"))
+            {
+                DrawBone(entity, 67, 66, color);
+                DrawBone(entity, 66, 0, color);
+                DrawBone(entity, 0, 73, color);
+                DrawBone(entity, 73, 74, color);
+
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
+
+                DrawBone(entity, 7, 10, color);
+                DrawBone(entity, 10, 11, color);
+                DrawBone(entity, 11, 12, color);
+
+                DrawBone(entity, 7, 38, color);
+                DrawBone(entity, 38, 39, color);
+                DrawBone(entity, 39, 40, color);
+            }
+            else if (entity.Entity_Model_Name.Contains("tm_prof"))
+            {
+                DrawBone(entity, 72, 71, color);
+                DrawBone(entity, 71, 0, color);
+                DrawBone(entity, 0, 78, color);
+                DrawBone(entity, 78, 79, color);
+
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
+
+                DrawBone(entity, 7, 11, color);
+                DrawBone(entity, 11, 12, color);
+                DrawBone(entity, 12, 13, color);
+
+                DrawBone(entity, 7, 39, color);
+                DrawBone(entity, 39, 40, color);
+                DrawBone(entity, 40, 41, color);
+            }
+            else if (entity.Entity_Model_Name.Contains("tm_anar"))
+            {
+                DrawBone(entity, 69, 68, color);
+                DrawBone(entity, 68, 0, color);
+                DrawBone(entity, 0, 75, color);
+                DrawBone(entity, 75, 76, color);
+
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
+
+                DrawBone(entity, 7, 12, color);
+                DrawBone(entity, 12, 13, color);
+                DrawBone(entity, 13, 14, color);
+
+                DrawBone(entity, 7, 40, color);
+                DrawBone(entity, 40, 41, color);
+                DrawBone(entity, 41, 42, color);
+            }
+            else if (entity.Entity_Model_Name.Contains("ctm_swat"))
+            {
+                DrawBone(entity, 69, 68, color);
+                DrawBone(entity, 68, 0, color);
+                DrawBone(entity, 0, 75, color);
+                DrawBone(entity, 75, 76, color);
+
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
+
+                DrawBone(entity, 7, 12, color);
+                DrawBone(entity, 12, 13, color);
+                DrawBone(entity, 13, 14, color);
+
+                DrawBone(entity, 7, 40, color);
+                DrawBone(entity, 40, 41, color);
+                DrawBone(entity, 41, 42, color);
+            }
+
+            else if (entity.Entity_Model_Name.Contains("CTM_SAS") || entity.Entity_Model_Name.Contains("ctm_sas"))
+            {
+                DrawBone(entity, 83, 82, color);
+                DrawBone(entity, 82, 0, color);
+                DrawBone(entity, 0, 73, color);
+                DrawBone(entity, 73, 74, color);
+
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
+
+                DrawBone(entity, 7, 11, color);
+                DrawBone(entity, 11, 12, color);
+                DrawBone(entity, 12, 13, color);
+
+                DrawBone(entity, 7, 40, color);
+                DrawBone(entity, 40, 41, color);
+                DrawBone(entity, 41, 42, color);
+            }
+            else if (entity.Entity_Model_Name.Contains("ctm_idf"))
+            {
+                DrawBone(entity, 72, 71, color);
+                DrawBone(entity, 71, 0, color);
+                DrawBone(entity, 0, 78, color);
+                DrawBone(entity, 78, 79, color);
+
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
+
+                DrawBone(entity, 7, 11, color);
+                DrawBone(entity, 11, 12, color);
+                DrawBone(entity, 12, 13, color);
+
+                DrawBone(entity, 7, 41, color);
+                DrawBone(entity, 41, 42, color);
+                DrawBone(entity, 42, 43, color);
+            }
+            else if (entity.Entity_Model_Name.Contains("ctm_st6"))
+            {
+                DrawBone(entity, 67, 66, color);
+                DrawBone(entity, 66, 0, color);
+                DrawBone(entity, 0, 73, color);
+                DrawBone(entity, 73, 74, color);
+
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
+
+                DrawBone(entity, 7, 10, color);
+                DrawBone(entity, 10, 11, color);
+                DrawBone(entity, 11, 12, color);
+
+                DrawBone(entity, 7, 38, color);
+                DrawBone(entity, 38, 39, color);
+                DrawBone(entity, 39, 40, color);
+            }
+            else if (entity.Entity_Model_Name.Contains("ctm_fbi"))
+            {
+                DrawBone(entity, 67, 66, color);
+                DrawBone(entity, 66, 0, color);
+                DrawBone(entity, 0, 73, color);
+                DrawBone(entity, 73, 74, color);
+
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
+
+                DrawBone(entity, 7, 10, color);
+                DrawBone(entity, 10, 11, color);
+                DrawBone(entity, 11, 12, color);
+
+                DrawBone(entity, 7, 38, color);
+                DrawBone(entity, 38, 39, color);
+                DrawBone(entity, 39, 40, color);
+            }
+            else if (entity.Entity_Model_Name.Contains("ctm_gsg9"))
+            {
+                DrawBone(entity, 67, 66, color);
+                DrawBone(entity, 66, 0, color);
+                DrawBone(entity, 0, 73, color);
+                DrawBone(entity, 73, 74, color);
+
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
+
+                DrawBone(entity, 7, 10, color);
+                DrawBone(entity, 10, 11, color);
+                DrawBone(entity, 11, 12, color);
+
+                DrawBone(entity, 7, 38, color);
+                DrawBone(entity, 38, 39, color);
+                DrawBone(entity, 39, 40, color);
+            }
+            else if (entity.Entity_Model_Name.Contains("ctm_gign"))
+            {
+                DrawBone(entity, 71, 70, color);
+                DrawBone(entity, 70, 0, color);
+                DrawBone(entity, 0, 77, color);
+                DrawBone(entity, 77, 79, color);
+
+                DrawBone(entity, 0, 6, color);
+                DrawBone(entity, 6, 7, color);
+                DrawBone(entity, 7, 8, color);
+
+                DrawBone(entity, 7, 11, color);
+                DrawBone(entity, 11, 12, color);
+                DrawBone(entity, 12, 13, color);
+
+                DrawBone(entity, 7, 40, color);
+                DrawBone(entity, 40, 41, color);
+                DrawBone(entity, 41, 42, color);
+            }
         }
     }
 }

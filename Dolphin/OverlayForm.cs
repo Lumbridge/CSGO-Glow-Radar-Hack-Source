@@ -142,19 +142,86 @@ namespace Dolphin
                     ViewMatrix = Matrix4x4.ReadMatrix(Mem, dwClient + dwViewMatrix);
 
                     // perform this loop for every entity
-                    for (int i = 0; i < 64; i++)
+                    for (int i = 0; i < 32; i++)
                     {
+                        // increment rainbow cycle colour
                         progress += 0.00001f;
 
+                        // create new entity instance
                         Entity Entity = new Entity(i);
 
-                        if(Entity.Entity_Team != LE.LocalEntity_Team && Entity.Entity_isAlive())
+                        // Do ESP
+                        if(Entity.Entity_isAlive() && Entity.Entity_Base != LE.LocalEntity_Base)
                         {
-                            Drawing2D.DrawESPBox(Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize), Entity.Entity_Position_W2S, Color.White, GlobalVariables.Device);
-                            Drawing2D.DrawSkeleton(Entity.Entity_BoneBase, Mem, ViewMatrix, WindowSize, GlobalVariables.Device, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)));
-                            Drawing2D.DrawShadowText(Entity.Entity_Position_W2S.X - 20, Entity.Entity_Position_W2S.Y, 12.0f, Color.Lime, ("❤ " + Entity.Entity_Health), GlobalVariables.Device, GlobalVariables.FontFactory, WindowSize);
+                            // friendly box esp
+                            if (BoxESPEnabledFriendly && Entity.Entity_Team == LE.LocalEntity_Team)
+                            {
+                                if(RainbowESPEnabledFriendly)
+                                {
+                                    Drawing2D.DrawESPBox(
+                                        Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
+                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)), GlobalVariables.Device);
+                                }
+                                else
+                                {
+                                    Drawing2D.DrawESPBox(
+                                        Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
+                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(ESPTeamARGB), GlobalVariables.Device);
+                                }
+                            }
+
+                            // friendly skeleton esp
+                            if (SkeletonsEnabledFriendly && Entity.Entity_Team == LE.LocalEntity_Team)
+                            {
+                                if(RainbowESPEnabledFriendly)
+                                {
+                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)));
+                                }
+                                else
+                                {
+                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(ESPTeamARGB));
+                                }
+                            }
+
+                            // enenmy box esp
+                            if (BoxESPEnabledOpposition && Entity.Entity_Team != LE.LocalEntity_Team)
+                            {
+                                if(RainbowESPEnabledOpposition)
+                                {
+                                    Drawing2D.DrawESPBox(
+                                        Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
+                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)), GlobalVariables.Device);
+                                }
+                                else
+                                {
+                                    Drawing2D.DrawESPBox(
+                                        Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
+                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(ESPEnemyARGB), GlobalVariables.Device);
+                                }
+                            }
+
+                            // enemy skeleton esp
+                            if (SkeletonsEnabledOpposition && Entity.Entity_Team != LE.LocalEntity_Team)
+                            {
+                                if(RainbowESPEnabledOpposition)
+                                {
+                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)));
+                                }
+                                else
+                                {
+                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(ESPEnemyARGB));
+                                }
+
+                            }
                         }
 
+                        // Do HP Label
+                        if (Entity.Entity_Team != LE.LocalEntity_Team && Entity.Entity_isAlive())
+                        {
+                            Drawing2D.DrawShadowText(Entity.Entity_Position_W2S.X - 20, Entity.Entity_Position_W2S.Y, 12.0f, Color.Lime, ("《 ❤ " + Entity.Entity_Health + " 》"), GlobalVariables.Device, GlobalVariables.FontFactory, WindowSize);
+                        }
+
+                        // Do Glow
                         if (GlowEnabledOpposition || GlowEnabledFriendly)
                         {
                             Glow.DoGlow(Mem, Entity, LE, progress);

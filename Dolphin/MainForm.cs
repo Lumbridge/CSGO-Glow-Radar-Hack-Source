@@ -15,19 +15,31 @@ namespace Dolphin
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            GlowEnabledFriendly = true;
-            GlowEnabledOpposition = true;
+            GlowEnabledFriendly = false;
+            GlowEnabledOpposition = false;
+
             RainbowEnabledFriendly = false;
             RainbowEnabledOpposition = false;
 
-            GlowEnemyARGB = System.Drawing.Color.FromArgb(255, 255, 0, 0);
             GlowTeamARGB = System.Drawing.Color.FromArgb(255, 0, 255, 0);
+            GlowEnemyARGB = System.Drawing.Color.FromArgb(255, 255, 0, 0);
+
+            BoxESPEnabledFriendly = false;
+            BoxESPEnabledOpposition = true;
+
+            SkeletonsEnabledFriendly = false;
+            SkeletonsEnabledOpposition = true;
+
+            RainbowEnabledFriendly = false;
+            RainbowEnabledOpposition = false;
+
+            ESPTeamARGB = System.Drawing.Color.FromArgb(255, 0, 255, 0);
+            ESPEnemyARGB = System.Drawing.Color.FromArgb(255, 255, 0, 0);
 
             RadarEnabled = true;
             RadarSize = 300;
             RadarBlipSize = 5;
             RadarOpacity = 1.0f;
-
             RadarTopLeftPosition = new SharpDX.Vector2(286, 40);
         }
 
@@ -227,6 +239,101 @@ namespace Dolphin
             teamBNumberBox.Value = GlowTeamARGB.B;
         }
 
+        #region ESP Tab
+
+        #region ESP Team
+        private void enableTeamBoxESPCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            BoxESPEnabledFriendly = enableTeamBoxESPCheckBox.Checked;
+        }
+
+        private void enableTeamSkeletonsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            SkeletonsEnabledFriendly = enableEnemySkeletonsCheckbox.Checked;
+        }
+
+        private void rainbowTeamESPCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            RainbowESPEnabledFriendly = rainbowTeamCheckbox.Checked;
+        }
+
+        private void teamESP_R_NumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            ESPFriendlyR = (int)teamESP_R_NumberBox.Value;
+        }
+
+        private void teamESP_G_NumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            ESPFriendlyG = (int)teamESP_G_NumberBox.Value;
+        }
+
+        private void teamESP_B_NumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            ESPFriendlyB = (int)teamESP_B_NumberBox.Value;
+        }
+
+        private void customESPTeamColourButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = colorDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                ESPTeamARGB = colorDialog.Color;
+            }
+
+            teamESP_R_NumberBox.Value = ESPTeamARGB.R;
+            teamESP_G_NumberBox.Value = ESPTeamARGB.G;
+            teamESP_B_NumberBox.Value = ESPTeamARGB.B;
+        }
+        #endregion
+
+        #region ESP Enemy
+        private void enableEnemyBoxESPCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            BoxESPEnabledOpposition = enableEnemyBoxESPCheckBox.Checked;
+        }
+
+        private void enableEnemySkeletonsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            SkeletonsEnabledOpposition = enableEnemySkeletonsCheckbox.Checked;
+        }
+
+        private void rainbowEnemyESPCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            RainbowESPEnabledOpposition = rainbowEnemyESPCheckBox.Checked;
+        }
+
+        private void enemyESP_R_NumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            ESPOppositionR = (int)enemyESP_R_NumberBox.Value;
+        }
+
+        private void enemyESP_G_NumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            ESPOppositionG = (int)enemyESP_G_NumberBox.Value;
+        }
+
+        private void enemyESP_B_NumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            ESPOppositionB = (int)enemyESP_B_NumberBox.Value;
+        }
+
+        private void customESPEnemyColourButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = colorDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                ESPEnemyARGB = colorDialog.Color;
+            }
+
+            enemyESP_R_NumberBox.Value = ESPEnemyARGB.R;
+            enemyESP_G_NumberBox.Value = ESPEnemyARGB.G;
+            enemyESP_B_NumberBox.Value = ESPEnemyARGB.B;
+        }
+        #endregion
+
+        #endregion
+
+        #region Config Tab
         private void saveConfigButton_Click(object sender, EventArgs e)
         {
             saveFileDialog.DefaultExt = ".cfg";
@@ -234,7 +341,7 @@ namespace Dolphin
 
             var result = saveFileDialog.ShowDialog();
 
-            if(result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
                 File.WriteAllText(saveFileDialog.FileName, GetCurrentConfigString());
             }
@@ -244,7 +351,7 @@ namespace Dolphin
         {
             var result = openFileDialog.ShowDialog();
 
-            if(result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
                 LoadConfigFile(openFileDialog.FileName);
             }
@@ -263,6 +370,20 @@ namespace Dolphin
             rainbowEnemyCheckBox.Checked = RainbowEnabledOpposition;
             enemyColourBasedOnHPCheckBox.Checked = HPToColourEnabledOpposition;
 
+            enableTeamBoxESPCheckBox.Checked = BoxESPEnabledFriendly;
+            enableTeamSkeletonsCheckBox.Checked = SkeletonsEnabledFriendly;
+            rainbowTeamESPCheckBox.Checked = RainbowESPEnabledFriendly;
+            teamESP_R_NumberBox.Value = ESPFriendlyR;
+            teamESP_G_NumberBox.Value = ESPFriendlyG;
+            teamESP_B_NumberBox.Value = ESPFriendlyB;
+
+            enableEnemyBoxESPCheckBox.Checked = BoxESPEnabledOpposition;
+            enableEnemySkeletonsCheckbox.Checked = SkeletonsEnabledOpposition;
+            rainbowEnemyESPCheckBox.Checked = RainbowEnabledOpposition;
+            enemyESP_R_NumberBox.Value = ESPOppositionR;
+            enemyESP_G_NumberBox.Value = ESPOppositionG;
+            enemyESP_B_NumberBox.Value = ESPOppositionB;
+
             enableRadarCheckBox.Checked = RadarEnabled;
             radarSizeNumberBox.Value = RadarSize;
             radarBlipSizeNumberBox.Value = RadarBlipSize;
@@ -270,5 +391,6 @@ namespace Dolphin
             rdrTopLeftY.Value = (decimal)RadarTopLeftPosition.Y;
             radarOpacityNumberBox.Value = (decimal)RadarOpacity;
         }
+        #endregion
     }
 }

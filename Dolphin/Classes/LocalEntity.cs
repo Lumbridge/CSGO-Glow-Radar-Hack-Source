@@ -38,7 +38,7 @@ namespace Dolphin.Classes
         }
         public bool LocalEntity_isAlive()
         {
-            if (LocalEntity_Health <= 1)
+            if (LocalEntity_Health < 1)
                 return false;
             else
                 return true;

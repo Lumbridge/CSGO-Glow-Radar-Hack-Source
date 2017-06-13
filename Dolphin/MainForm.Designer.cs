@@ -51,6 +51,27 @@
             this.glowEnabledEnemyCheckBox = new System.Windows.Forms.CheckBox();
             this.glowEnabledTeamCheckBox = new System.Windows.Forms.CheckBox();
             this.teamColorPickButton = new System.Windows.Forms.Button();
+            this.ESPTab = new System.Windows.Forms.TabPage();
+            this.enableEnemySkeletonsCheckbox = new System.Windows.Forms.CheckBox();
+            this.enableTeamSkeletonsCheckBox = new System.Windows.Forms.CheckBox();
+            this.customESPEnemyColourButton = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.teamESP_B_NumberBox = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.teamESP_G_NumberBox = new System.Windows.Forms.NumericUpDown();
+            this.teamESP_R_NumberBox = new System.Windows.Forms.NumericUpDown();
+            this.label12 = new System.Windows.Forms.Label();
+            this.enemyESP_B_NumberBox = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.enemyESP_G_NumberBox = new System.Windows.Forms.NumericUpDown();
+            this.enemyESP_R_NumberBox = new System.Windows.Forms.NumericUpDown();
+            this.rainbowEnemyESPCheckBox = new System.Windows.Forms.CheckBox();
+            this.rainbowTeamESPCheckBox = new System.Windows.Forms.CheckBox();
+            this.enableEnemyBoxESPCheckBox = new System.Windows.Forms.CheckBox();
+            this.enableTeamBoxESPCheckBox = new System.Windows.Forms.CheckBox();
+            this.customESPTeamColourButton = new System.Windows.Forms.Button();
             this.radarTab = new System.Windows.Forms.TabPage();
             this.radarOpacityLabel = new System.Windows.Forms.Label();
             this.radarOpacityNumberBox = new System.Windows.Forms.NumericUpDown();
@@ -74,7 +95,6 @@
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.glowTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.teamBNumberBox)).BeginInit();
@@ -83,6 +103,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.enemyBNumberBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.enemyGNumberBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.enemyRNumberBox)).BeginInit();
+            this.ESPTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.teamESP_B_NumberBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teamESP_G_NumberBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teamESP_R_NumberBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyESP_B_NumberBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyESP_G_NumberBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyESP_R_NumberBox)).BeginInit();
             this.radarTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radarOpacityNumberBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rdrTopLeftY)).BeginInit();
@@ -96,9 +123,9 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.glowTab);
+            this.tabControl1.Controls.Add(this.ESPTab);
             this.tabControl1.Controls.Add(this.radarTab);
             this.tabControl1.Controls.Add(this.configTab);
-            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -137,7 +164,7 @@
             // 
             // enemyColorPickButton
             // 
-            this.enemyColorPickButton.Location = new System.Drawing.Point(325, 29);
+            this.enemyColorPickButton.Location = new System.Drawing.Point(282, 75);
             this.enemyColorPickButton.Name = "enemyColorPickButton";
             this.enemyColorPickButton.Size = new System.Drawing.Size(57, 72);
             this.enemyColorPickButton.TabIndex = 57;
@@ -148,7 +175,7 @@
             // enemyColourBasedOnHPCheckBox
             // 
             this.enemyColourBasedOnHPCheckBox.AutoSize = true;
-            this.enemyColourBasedOnHPCheckBox.Location = new System.Drawing.Point(208, 133);
+            this.enemyColourBasedOnHPCheckBox.Location = new System.Drawing.Point(208, 52);
             this.enemyColourBasedOnHPCheckBox.Name = "enemyColourBasedOnHPCheckBox";
             this.enemyColourBasedOnHPCheckBox.Size = new System.Drawing.Size(160, 17);
             this.enemyColourBasedOnHPCheckBox.TabIndex = 56;
@@ -159,7 +186,7 @@
             // teamColourBasedOnHPCheckBox
             // 
             this.teamColourBasedOnHPCheckBox.AutoSize = true;
-            this.teamColourBasedOnHPCheckBox.Location = new System.Drawing.Point(6, 133);
+            this.teamColourBasedOnHPCheckBox.Location = new System.Drawing.Point(6, 52);
             this.teamColourBasedOnHPCheckBox.Name = "teamColourBasedOnHPCheckBox";
             this.teamColourBasedOnHPCheckBox.Size = new System.Drawing.Size(152, 17);
             this.teamColourBasedOnHPCheckBox.TabIndex = 55;
@@ -170,7 +197,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(103, 83);
+            this.label3.Location = new System.Drawing.Point(59, 129);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(14, 13);
             this.label3.TabIndex = 54;
@@ -178,21 +205,21 @@
             // 
             // teamBNumberBox
             // 
-            this.teamBNumberBox.Location = new System.Drawing.Point(6, 81);
+            this.teamBNumberBox.Location = new System.Drawing.Point(6, 127);
             this.teamBNumberBox.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
             this.teamBNumberBox.Name = "teamBNumberBox";
-            this.teamBNumberBox.Size = new System.Drawing.Size(91, 20);
+            this.teamBNumberBox.Size = new System.Drawing.Size(47, 20);
             this.teamBNumberBox.TabIndex = 53;
             this.teamBNumberBox.ValueChanged += new System.EventHandler(this.teamBNumberBox_ValueChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(103, 57);
+            this.label4.Location = new System.Drawing.Point(59, 103);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(15, 13);
             this.label4.TabIndex = 52;
@@ -201,7 +228,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(103, 31);
+            this.label5.Location = new System.Drawing.Point(59, 77);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(15, 13);
             this.label5.TabIndex = 51;
@@ -209,14 +236,14 @@
             // 
             // teamGNumberBox
             // 
-            this.teamGNumberBox.Location = new System.Drawing.Point(6, 55);
+            this.teamGNumberBox.Location = new System.Drawing.Point(6, 101);
             this.teamGNumberBox.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
             this.teamGNumberBox.Name = "teamGNumberBox";
-            this.teamGNumberBox.Size = new System.Drawing.Size(91, 20);
+            this.teamGNumberBox.Size = new System.Drawing.Size(47, 20);
             this.teamGNumberBox.TabIndex = 50;
             this.teamGNumberBox.Value = new decimal(new int[] {
             255,
@@ -227,21 +254,21 @@
             // 
             // teamRNumberBox
             // 
-            this.teamRNumberBox.Location = new System.Drawing.Point(6, 29);
+            this.teamRNumberBox.Location = new System.Drawing.Point(6, 75);
             this.teamRNumberBox.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
             this.teamRNumberBox.Name = "teamRNumberBox";
-            this.teamRNumberBox.Size = new System.Drawing.Size(91, 20);
+            this.teamRNumberBox.Size = new System.Drawing.Size(47, 20);
             this.teamRNumberBox.TabIndex = 49;
             this.teamRNumberBox.ValueChanged += new System.EventHandler(this.teamRNumberBox_ValueChanged);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(305, 83);
+            this.label6.Location = new System.Drawing.Point(261, 129);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(14, 13);
             this.label6.TabIndex = 48;
@@ -249,21 +276,21 @@
             // 
             // enemyBNumberBox
             // 
-            this.enemyBNumberBox.Location = new System.Drawing.Point(208, 81);
+            this.enemyBNumberBox.Location = new System.Drawing.Point(208, 127);
             this.enemyBNumberBox.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
             this.enemyBNumberBox.Name = "enemyBNumberBox";
-            this.enemyBNumberBox.Size = new System.Drawing.Size(91, 20);
+            this.enemyBNumberBox.Size = new System.Drawing.Size(47, 20);
             this.enemyBNumberBox.TabIndex = 47;
             this.enemyBNumberBox.ValueChanged += new System.EventHandler(this.enemyBNumberBox_ValueChanged);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(305, 57);
+            this.label7.Location = new System.Drawing.Point(261, 103);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(15, 13);
             this.label7.TabIndex = 46;
@@ -272,7 +299,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(305, 31);
+            this.label8.Location = new System.Drawing.Point(261, 77);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(15, 13);
             this.label8.TabIndex = 45;
@@ -280,27 +307,27 @@
             // 
             // enemyGNumberBox
             // 
-            this.enemyGNumberBox.Location = new System.Drawing.Point(208, 55);
+            this.enemyGNumberBox.Location = new System.Drawing.Point(208, 101);
             this.enemyGNumberBox.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
             this.enemyGNumberBox.Name = "enemyGNumberBox";
-            this.enemyGNumberBox.Size = new System.Drawing.Size(91, 20);
+            this.enemyGNumberBox.Size = new System.Drawing.Size(47, 20);
             this.enemyGNumberBox.TabIndex = 44;
             this.enemyGNumberBox.ValueChanged += new System.EventHandler(this.enemyGNumberBox_ValueChanged);
             // 
             // enemyRNumberBox
             // 
-            this.enemyRNumberBox.Location = new System.Drawing.Point(208, 29);
+            this.enemyRNumberBox.Location = new System.Drawing.Point(208, 75);
             this.enemyRNumberBox.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
             this.enemyRNumberBox.Name = "enemyRNumberBox";
-            this.enemyRNumberBox.Size = new System.Drawing.Size(91, 20);
+            this.enemyRNumberBox.Size = new System.Drawing.Size(47, 20);
             this.enemyRNumberBox.TabIndex = 43;
             this.enemyRNumberBox.Value = new decimal(new int[] {
             255,
@@ -312,7 +339,7 @@
             // rainbowEnemyCheckBox
             // 
             this.rainbowEnemyCheckBox.AutoSize = true;
-            this.rainbowEnemyCheckBox.Location = new System.Drawing.Point(208, 110);
+            this.rainbowEnemyCheckBox.Location = new System.Drawing.Point(208, 29);
             this.rainbowEnemyCheckBox.Name = "rainbowEnemyCheckBox";
             this.rainbowEnemyCheckBox.Size = new System.Drawing.Size(130, 17);
             this.rainbowEnemyCheckBox.TabIndex = 42;
@@ -323,7 +350,7 @@
             // rainbowTeamCheckbox
             // 
             this.rainbowTeamCheckbox.AutoSize = true;
-            this.rainbowTeamCheckbox.Location = new System.Drawing.Point(6, 110);
+            this.rainbowTeamCheckbox.Location = new System.Drawing.Point(6, 29);
             this.rainbowTeamCheckbox.Name = "rainbowTeamCheckbox";
             this.rainbowTeamCheckbox.Size = new System.Drawing.Size(125, 17);
             this.rainbowTeamCheckbox.TabIndex = 41;
@@ -334,8 +361,6 @@
             // glowEnabledEnemyCheckBox
             // 
             this.glowEnabledEnemyCheckBox.AutoSize = true;
-            this.glowEnabledEnemyCheckBox.Checked = true;
-            this.glowEnabledEnemyCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.glowEnabledEnemyCheckBox.Location = new System.Drawing.Point(208, 6);
             this.glowEnabledEnemyCheckBox.Name = "glowEnabledEnemyCheckBox";
             this.glowEnabledEnemyCheckBox.Size = new System.Drawing.Size(121, 17);
@@ -347,8 +372,6 @@
             // glowEnabledTeamCheckBox
             // 
             this.glowEnabledTeamCheckBox.AutoSize = true;
-            this.glowEnabledTeamCheckBox.Checked = true;
-            this.glowEnabledTeamCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.glowEnabledTeamCheckBox.Location = new System.Drawing.Point(6, 6);
             this.glowEnabledTeamCheckBox.Name = "glowEnabledTeamCheckBox";
             this.glowEnabledTeamCheckBox.Size = new System.Drawing.Size(116, 17);
@@ -359,13 +382,275 @@
             // 
             // teamColorPickButton
             // 
-            this.teamColorPickButton.Location = new System.Drawing.Point(124, 29);
+            this.teamColorPickButton.Location = new System.Drawing.Point(79, 75);
             this.teamColorPickButton.Name = "teamColorPickButton";
             this.teamColorPickButton.Size = new System.Drawing.Size(57, 72);
             this.teamColorPickButton.TabIndex = 58;
             this.teamColorPickButton.Text = "Custom Team Colour";
             this.teamColorPickButton.UseVisualStyleBackColor = true;
             this.teamColorPickButton.Click += new System.EventHandler(this.teamColorPickButton_Click);
+            // 
+            // ESPTab
+            // 
+            this.ESPTab.Controls.Add(this.enableEnemySkeletonsCheckbox);
+            this.ESPTab.Controls.Add(this.enableTeamSkeletonsCheckBox);
+            this.ESPTab.Controls.Add(this.customESPEnemyColourButton);
+            this.ESPTab.Controls.Add(this.label9);
+            this.ESPTab.Controls.Add(this.teamESP_B_NumberBox);
+            this.ESPTab.Controls.Add(this.label10);
+            this.ESPTab.Controls.Add(this.label11);
+            this.ESPTab.Controls.Add(this.teamESP_G_NumberBox);
+            this.ESPTab.Controls.Add(this.teamESP_R_NumberBox);
+            this.ESPTab.Controls.Add(this.label12);
+            this.ESPTab.Controls.Add(this.enemyESP_B_NumberBox);
+            this.ESPTab.Controls.Add(this.label13);
+            this.ESPTab.Controls.Add(this.label14);
+            this.ESPTab.Controls.Add(this.enemyESP_G_NumberBox);
+            this.ESPTab.Controls.Add(this.enemyESP_R_NumberBox);
+            this.ESPTab.Controls.Add(this.rainbowEnemyESPCheckBox);
+            this.ESPTab.Controls.Add(this.rainbowTeamESPCheckBox);
+            this.ESPTab.Controls.Add(this.enableEnemyBoxESPCheckBox);
+            this.ESPTab.Controls.Add(this.enableTeamBoxESPCheckBox);
+            this.ESPTab.Controls.Add(this.customESPTeamColourButton);
+            this.ESPTab.Location = new System.Drawing.Point(4, 22);
+            this.ESPTab.Name = "ESPTab";
+            this.ESPTab.Padding = new System.Windows.Forms.Padding(3);
+            this.ESPTab.Size = new System.Drawing.Size(394, 179);
+            this.ESPTab.TabIndex = 3;
+            this.ESPTab.Text = "ESP";
+            this.ESPTab.UseVisualStyleBackColor = true;
+            // 
+            // enableEnemySkeletonsCheckbox
+            // 
+            this.enableEnemySkeletonsCheckbox.AutoSize = true;
+            this.enableEnemySkeletonsCheckbox.Checked = true;
+            this.enableEnemySkeletonsCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.enableEnemySkeletonsCheckbox.Location = new System.Drawing.Point(208, 29);
+            this.enableEnemySkeletonsCheckbox.Name = "enableEnemySkeletonsCheckbox";
+            this.enableEnemySkeletonsCheckbox.Size = new System.Drawing.Size(144, 17);
+            this.enableEnemySkeletonsCheckbox.TabIndex = 80;
+            this.enableEnemySkeletonsCheckbox.Text = "Enable Enemy Skeletons";
+            this.enableEnemySkeletonsCheckbox.UseVisualStyleBackColor = true;
+            this.enableEnemySkeletonsCheckbox.CheckedChanged += new System.EventHandler(this.enableEnemySkeletonsCheckbox_CheckedChanged);
+            // 
+            // enableTeamSkeletonsCheckBox
+            // 
+            this.enableTeamSkeletonsCheckBox.AutoSize = true;
+            this.enableTeamSkeletonsCheckBox.Location = new System.Drawing.Point(6, 29);
+            this.enableTeamSkeletonsCheckBox.Name = "enableTeamSkeletonsCheckBox";
+            this.enableTeamSkeletonsCheckBox.Size = new System.Drawing.Size(139, 17);
+            this.enableTeamSkeletonsCheckBox.TabIndex = 79;
+            this.enableTeamSkeletonsCheckBox.Text = "Enable Team Skeletons";
+            this.enableTeamSkeletonsCheckBox.UseVisualStyleBackColor = true;
+            this.enableTeamSkeletonsCheckBox.CheckedChanged += new System.EventHandler(this.enableTeamSkeletonsCheckBox_CheckedChanged);
+            // 
+            // customESPEnemyColourButton
+            // 
+            this.customESPEnemyColourButton.Location = new System.Drawing.Point(278, 75);
+            this.customESPEnemyColourButton.Name = "customESPEnemyColourButton";
+            this.customESPEnemyColourButton.Size = new System.Drawing.Size(57, 72);
+            this.customESPEnemyColourButton.TabIndex = 77;
+            this.customESPEnemyColourButton.Text = "Custom Enemy Colour";
+            this.customESPEnemyColourButton.UseVisualStyleBackColor = true;
+            this.customESPEnemyColourButton.Click += new System.EventHandler(this.customESPEnemyColourButton_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(59, 129);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(14, 13);
+            this.label9.TabIndex = 74;
+            this.label9.Text = "B";
+            // 
+            // teamESP_B_NumberBox
+            // 
+            this.teamESP_B_NumberBox.Location = new System.Drawing.Point(6, 127);
+            this.teamESP_B_NumberBox.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.teamESP_B_NumberBox.Name = "teamESP_B_NumberBox";
+            this.teamESP_B_NumberBox.Size = new System.Drawing.Size(47, 20);
+            this.teamESP_B_NumberBox.TabIndex = 73;
+            this.teamESP_B_NumberBox.ValueChanged += new System.EventHandler(this.teamESP_B_NumberBox_ValueChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(59, 103);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(15, 13);
+            this.label10.TabIndex = 72;
+            this.label10.Text = "G";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(59, 77);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(15, 13);
+            this.label11.TabIndex = 71;
+            this.label11.Text = "R";
+            // 
+            // teamESP_G_NumberBox
+            // 
+            this.teamESP_G_NumberBox.Location = new System.Drawing.Point(6, 101);
+            this.teamESP_G_NumberBox.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.teamESP_G_NumberBox.Name = "teamESP_G_NumberBox";
+            this.teamESP_G_NumberBox.Size = new System.Drawing.Size(47, 20);
+            this.teamESP_G_NumberBox.TabIndex = 70;
+            this.teamESP_G_NumberBox.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.teamESP_G_NumberBox.ValueChanged += new System.EventHandler(this.teamESP_G_NumberBox_ValueChanged);
+            // 
+            // teamESP_R_NumberBox
+            // 
+            this.teamESP_R_NumberBox.Location = new System.Drawing.Point(6, 75);
+            this.teamESP_R_NumberBox.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.teamESP_R_NumberBox.Name = "teamESP_R_NumberBox";
+            this.teamESP_R_NumberBox.Size = new System.Drawing.Size(47, 20);
+            this.teamESP_R_NumberBox.TabIndex = 69;
+            this.teamESP_R_NumberBox.ValueChanged += new System.EventHandler(this.teamESP_R_NumberBox_ValueChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(261, 129);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(14, 13);
+            this.label12.TabIndex = 68;
+            this.label12.Text = "B";
+            // 
+            // enemyESP_B_NumberBox
+            // 
+            this.enemyESP_B_NumberBox.Location = new System.Drawing.Point(208, 127);
+            this.enemyESP_B_NumberBox.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.enemyESP_B_NumberBox.Name = "enemyESP_B_NumberBox";
+            this.enemyESP_B_NumberBox.Size = new System.Drawing.Size(47, 20);
+            this.enemyESP_B_NumberBox.TabIndex = 67;
+            this.enemyESP_B_NumberBox.ValueChanged += new System.EventHandler(this.enemyESP_B_NumberBox_ValueChanged);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(261, 103);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(15, 13);
+            this.label13.TabIndex = 66;
+            this.label13.Text = "G";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(261, 77);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(15, 13);
+            this.label14.TabIndex = 65;
+            this.label14.Text = "R";
+            // 
+            // enemyESP_G_NumberBox
+            // 
+            this.enemyESP_G_NumberBox.Location = new System.Drawing.Point(208, 101);
+            this.enemyESP_G_NumberBox.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.enemyESP_G_NumberBox.Name = "enemyESP_G_NumberBox";
+            this.enemyESP_G_NumberBox.Size = new System.Drawing.Size(47, 20);
+            this.enemyESP_G_NumberBox.TabIndex = 64;
+            this.enemyESP_G_NumberBox.ValueChanged += new System.EventHandler(this.enemyESP_G_NumberBox_ValueChanged);
+            // 
+            // enemyESP_R_NumberBox
+            // 
+            this.enemyESP_R_NumberBox.Location = new System.Drawing.Point(208, 75);
+            this.enemyESP_R_NumberBox.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.enemyESP_R_NumberBox.Name = "enemyESP_R_NumberBox";
+            this.enemyESP_R_NumberBox.Size = new System.Drawing.Size(47, 20);
+            this.enemyESP_R_NumberBox.TabIndex = 63;
+            this.enemyESP_R_NumberBox.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.enemyESP_R_NumberBox.ValueChanged += new System.EventHandler(this.enemyESP_R_NumberBox_ValueChanged);
+            // 
+            // rainbowEnemyESPCheckBox
+            // 
+            this.rainbowEnemyESPCheckBox.AutoSize = true;
+            this.rainbowEnemyESPCheckBox.Location = new System.Drawing.Point(208, 52);
+            this.rainbowEnemyESPCheckBox.Name = "rainbowEnemyESPCheckBox";
+            this.rainbowEnemyESPCheckBox.Size = new System.Drawing.Size(127, 17);
+            this.rainbowEnemyESPCheckBox.TabIndex = 62;
+            this.rainbowEnemyESPCheckBox.Text = "Rainbow Enemy ESP";
+            this.rainbowEnemyESPCheckBox.UseVisualStyleBackColor = true;
+            this.rainbowEnemyESPCheckBox.CheckedChanged += new System.EventHandler(this.rainbowEnemyESPCheckBox_CheckedChanged);
+            // 
+            // rainbowTeamESPCheckBox
+            // 
+            this.rainbowTeamESPCheckBox.AutoSize = true;
+            this.rainbowTeamESPCheckBox.Location = new System.Drawing.Point(6, 52);
+            this.rainbowTeamESPCheckBox.Name = "rainbowTeamESPCheckBox";
+            this.rainbowTeamESPCheckBox.Size = new System.Drawing.Size(122, 17);
+            this.rainbowTeamESPCheckBox.TabIndex = 61;
+            this.rainbowTeamESPCheckBox.Text = "Rainbow Team ESP";
+            this.rainbowTeamESPCheckBox.UseVisualStyleBackColor = true;
+            this.rainbowTeamESPCheckBox.CheckedChanged += new System.EventHandler(this.rainbowTeamESPCheckBox_CheckedChanged);
+            // 
+            // enableEnemyBoxESPCheckBox
+            // 
+            this.enableEnemyBoxESPCheckBox.AutoSize = true;
+            this.enableEnemyBoxESPCheckBox.Checked = true;
+            this.enableEnemyBoxESPCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.enableEnemyBoxESPCheckBox.Location = new System.Drawing.Point(208, 6);
+            this.enableEnemyBoxESPCheckBox.Name = "enableEnemyBoxESPCheckBox";
+            this.enableEnemyBoxESPCheckBox.Size = new System.Drawing.Size(139, 17);
+            this.enableEnemyBoxESPCheckBox.TabIndex = 60;
+            this.enableEnemyBoxESPCheckBox.Text = "Enable Enemy Box ESP";
+            this.enableEnemyBoxESPCheckBox.UseVisualStyleBackColor = true;
+            this.enableEnemyBoxESPCheckBox.CheckedChanged += new System.EventHandler(this.enableEnemyBoxESPCheckBox_CheckedChanged);
+            // 
+            // enableTeamBoxESPCheckBox
+            // 
+            this.enableTeamBoxESPCheckBox.AutoSize = true;
+            this.enableTeamBoxESPCheckBox.Location = new System.Drawing.Point(6, 6);
+            this.enableTeamBoxESPCheckBox.Name = "enableTeamBoxESPCheckBox";
+            this.enableTeamBoxESPCheckBox.Size = new System.Drawing.Size(134, 17);
+            this.enableTeamBoxESPCheckBox.TabIndex = 59;
+            this.enableTeamBoxESPCheckBox.Text = "Enable Team Box ESP";
+            this.enableTeamBoxESPCheckBox.UseVisualStyleBackColor = true;
+            this.enableTeamBoxESPCheckBox.CheckedChanged += new System.EventHandler(this.enableTeamBoxESPCheckBox_CheckedChanged);
+            // 
+            // customESPTeamColourButton
+            // 
+            this.customESPTeamColourButton.Location = new System.Drawing.Point(79, 75);
+            this.customESPTeamColourButton.Name = "customESPTeamColourButton";
+            this.customESPTeamColourButton.Size = new System.Drawing.Size(57, 72);
+            this.customESPTeamColourButton.TabIndex = 78;
+            this.customESPTeamColourButton.Text = "Custom Team Colour";
+            this.customESPTeamColourButton.UseVisualStyleBackColor = true;
+            this.customESPTeamColourButton.Click += new System.EventHandler(this.customESPTeamColourButton_Click);
             // 
             // radarTab
             // 
@@ -651,16 +936,6 @@
             // 
             this.openFileDialog.FileName = "openFileDialog1";
             // 
-            // tabPage1
-            // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(394, 179);
-            this.tabPage1.TabIndex = 3;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -684,6 +959,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.enemyBNumberBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.enemyGNumberBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.enemyRNumberBox)).EndInit();
+            this.ESPTab.ResumeLayout(false);
+            this.ESPTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.teamESP_B_NumberBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teamESP_G_NumberBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teamESP_R_NumberBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyESP_B_NumberBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyESP_G_NumberBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyESP_R_NumberBox)).EndInit();
             this.radarTab.ResumeLayout(false);
             this.radarTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radarOpacityNumberBox)).EndInit();
@@ -744,6 +1027,26 @@
         public System.Windows.Forms.CheckBox glowEnabledEnemyCheckBox;
         public System.Windows.Forms.CheckBox glowEnabledTeamCheckBox;
         public System.Windows.Forms.Button teamColorPickButton;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage ESPTab;
+        public System.Windows.Forms.Label label9;
+        public System.Windows.Forms.NumericUpDown teamESP_B_NumberBox;
+        public System.Windows.Forms.Label label10;
+        public System.Windows.Forms.Label label11;
+        public System.Windows.Forms.NumericUpDown teamESP_G_NumberBox;
+        public System.Windows.Forms.NumericUpDown teamESP_R_NumberBox;
+        private System.Windows.Forms.Label label12;
+        public System.Windows.Forms.NumericUpDown enemyESP_B_NumberBox;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        public System.Windows.Forms.NumericUpDown enemyESP_G_NumberBox;
+        public System.Windows.Forms.NumericUpDown enemyESP_R_NumberBox;
+        public System.Windows.Forms.CheckBox rainbowEnemyESPCheckBox;
+        public System.Windows.Forms.CheckBox rainbowTeamESPCheckBox;
+        public System.Windows.Forms.CheckBox enableEnemyBoxESPCheckBox;
+        public System.Windows.Forms.CheckBox enableTeamBoxESPCheckBox;
+        public System.Windows.Forms.Button customESPTeamColourButton;
+        public System.Windows.Forms.CheckBox enableEnemySkeletonsCheckbox;
+        public System.Windows.Forms.CheckBox enableTeamSkeletonsCheckBox;
+        public System.Windows.Forms.Button customESPEnemyColourButton;
     }
 }
