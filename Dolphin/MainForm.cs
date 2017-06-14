@@ -211,7 +211,7 @@ namespace Dolphin
 
         private void enableTeamSkeletonsCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            SkeletonsEnabledFriendly = enableEnemySkeletonsCheckbox.Checked;
+            SkeletonsEnabledFriendly = enableTeamSkeletonsCheckBox.Checked;
         }
 
         private void rainbowTeamESPCheckBox_CheckedChanged(object sender, EventArgs e)
