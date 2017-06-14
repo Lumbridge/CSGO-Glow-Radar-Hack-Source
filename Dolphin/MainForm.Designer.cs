@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.ESPTab = new System.Windows.Forms.TabPage();
+            this.rainbowEnemySkeletonESPCheckBox = new System.Windows.Forms.CheckBox();
+            this.rainbowTeamSkeletonESPCheckBox = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.customSkeletonESPEnemyColourButton = new System.Windows.Forms.Button();
@@ -72,6 +74,11 @@
             this.radarBlipSizeNumberBox = new System.Windows.Forms.NumericUpDown();
             this.radarSizeNumberBox = new System.Windows.Forms.NumericUpDown();
             this.enableRadarCheckBox = new System.Windows.Forms.CheckBox();
+            this.miscTab = new System.Windows.Forms.TabPage();
+            this.bunnyHopCheckbox = new System.Windows.Forms.CheckBox();
+            this.triggerBotCheckBox = new System.Windows.Forms.CheckBox();
+            this.noSmokeCheckBox = new System.Windows.Forms.CheckBox();
+            this.noFlashCheckBox = new System.Windows.Forms.CheckBox();
             this.configTab = new System.Windows.Forms.TabPage();
             this.saveConfigButton = new System.Windows.Forms.Button();
             this.loadConfigButton = new System.Windows.Forms.Button();
@@ -79,13 +86,7 @@
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.rainbowEnemySkeletonESPCheckBox = new System.Windows.Forms.CheckBox();
-            this.rainbowTeamSkeletonESPCheckBox = new System.Windows.Forms.CheckBox();
-            this.miscTab = new System.Windows.Forms.TabPage();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.enemyHPLabelCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.ESPTab.SuspendLayout();
             this.glowTab.SuspendLayout();
@@ -95,9 +96,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.rdrTopLeftX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radarBlipSizeNumberBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radarSizeNumberBox)).BeginInit();
+            this.miscTab.SuspendLayout();
             this.configTab.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
-            this.miscTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -138,6 +139,28 @@
             this.ESPTab.TabIndex = 3;
             this.ESPTab.Text = "ESP";
             this.ESPTab.UseVisualStyleBackColor = true;
+            // 
+            // rainbowEnemySkeletonESPCheckBox
+            // 
+            this.rainbowEnemySkeletonESPCheckBox.AutoSize = true;
+            this.rainbowEnemySkeletonESPCheckBox.Location = new System.Drawing.Point(208, 75);
+            this.rainbowEnemySkeletonESPCheckBox.Name = "rainbowEnemySkeletonESPCheckBox";
+            this.rainbowEnemySkeletonESPCheckBox.Size = new System.Drawing.Size(172, 17);
+            this.rainbowEnemySkeletonESPCheckBox.TabIndex = 90;
+            this.rainbowEnemySkeletonESPCheckBox.Text = "Rainbow Enemy Skeleton ESP";
+            this.rainbowEnemySkeletonESPCheckBox.UseVisualStyleBackColor = true;
+            this.rainbowEnemySkeletonESPCheckBox.CheckedChanged += new System.EventHandler(this.rainbowEnemySkeletonESPCheckBox_CheckedChanged);
+            // 
+            // rainbowTeamSkeletonESPCheckBox
+            // 
+            this.rainbowTeamSkeletonESPCheckBox.AutoSize = true;
+            this.rainbowTeamSkeletonESPCheckBox.Location = new System.Drawing.Point(6, 75);
+            this.rainbowTeamSkeletonESPCheckBox.Name = "rainbowTeamSkeletonESPCheckBox";
+            this.rainbowTeamSkeletonESPCheckBox.Size = new System.Drawing.Size(167, 17);
+            this.rainbowTeamSkeletonESPCheckBox.TabIndex = 89;
+            this.rainbowTeamSkeletonESPCheckBox.Text = "Rainbow Team Skeleton ESP";
+            this.rainbowTeamSkeletonESPCheckBox.UseVisualStyleBackColor = true;
+            this.rainbowTeamSkeletonESPCheckBox.CheckedChanged += new System.EventHandler(this.rainbowTeamSkeletonESPCheckBox_CheckedChanged);
             // 
             // label7
             // 
@@ -642,6 +665,65 @@
             this.enableRadarCheckBox.UseVisualStyleBackColor = true;
             this.enableRadarCheckBox.CheckedChanged += new System.EventHandler(this.enableRadarCheckBox_CheckedChanged);
             // 
+            // miscTab
+            // 
+            this.miscTab.Controls.Add(this.enemyHPLabelCheckBox);
+            this.miscTab.Controls.Add(this.bunnyHopCheckbox);
+            this.miscTab.Controls.Add(this.triggerBotCheckBox);
+            this.miscTab.Controls.Add(this.noSmokeCheckBox);
+            this.miscTab.Controls.Add(this.noFlashCheckBox);
+            this.miscTab.Location = new System.Drawing.Point(4, 22);
+            this.miscTab.Name = "miscTab";
+            this.miscTab.Padding = new System.Windows.Forms.Padding(3);
+            this.miscTab.Size = new System.Drawing.Size(394, 179);
+            this.miscTab.TabIndex = 4;
+            this.miscTab.Text = "Misc";
+            this.miscTab.UseVisualStyleBackColor = true;
+            // 
+            // bunnyHopCheckbox
+            // 
+            this.bunnyHopCheckbox.AutoSize = true;
+            this.bunnyHopCheckbox.Location = new System.Drawing.Point(6, 75);
+            this.bunnyHopCheckbox.Name = "bunnyHopCheckbox";
+            this.bunnyHopCheckbox.Size = new System.Drawing.Size(79, 17);
+            this.bunnyHopCheckbox.TabIndex = 3;
+            this.bunnyHopCheckbox.Text = "Bunny Hop";
+            this.bunnyHopCheckbox.UseVisualStyleBackColor = true;
+            this.bunnyHopCheckbox.CheckedChanged += new System.EventHandler(this.bunnyHopCheckbox_CheckedChanged);
+            // 
+            // triggerBotCheckBox
+            // 
+            this.triggerBotCheckBox.AutoSize = true;
+            this.triggerBotCheckBox.Location = new System.Drawing.Point(6, 52);
+            this.triggerBotCheckBox.Name = "triggerBotCheckBox";
+            this.triggerBotCheckBox.Size = new System.Drawing.Size(74, 17);
+            this.triggerBotCheckBox.TabIndex = 2;
+            this.triggerBotCheckBox.Text = "Triggerbot";
+            this.triggerBotCheckBox.UseVisualStyleBackColor = true;
+            this.triggerBotCheckBox.CheckedChanged += new System.EventHandler(this.triggerBotCheckBox_CheckedChanged);
+            // 
+            // noSmokeCheckBox
+            // 
+            this.noSmokeCheckBox.AutoSize = true;
+            this.noSmokeCheckBox.Location = new System.Drawing.Point(6, 29);
+            this.noSmokeCheckBox.Name = "noSmokeCheckBox";
+            this.noSmokeCheckBox.Size = new System.Drawing.Size(76, 17);
+            this.noSmokeCheckBox.TabIndex = 1;
+            this.noSmokeCheckBox.Text = "No Smoke";
+            this.noSmokeCheckBox.UseVisualStyleBackColor = true;
+            this.noSmokeCheckBox.CheckedChanged += new System.EventHandler(this.noSmokeCheckBox_CheckedChanged);
+            // 
+            // noFlashCheckBox
+            // 
+            this.noFlashCheckBox.AutoSize = true;
+            this.noFlashCheckBox.Location = new System.Drawing.Point(6, 6);
+            this.noFlashCheckBox.Name = "noFlashCheckBox";
+            this.noFlashCheckBox.Size = new System.Drawing.Size(68, 17);
+            this.noFlashCheckBox.TabIndex = 0;
+            this.noFlashCheckBox.Text = "No Flash";
+            this.noFlashCheckBox.UseVisualStyleBackColor = true;
+            this.noFlashCheckBox.CheckedChanged += new System.EventHandler(this.noFlashCheckBox_CheckedChanged);
+            // 
             // configTab
             // 
             this.configTab.Controls.Add(this.saveConfigButton);
@@ -687,81 +769,18 @@
             // 
             this.openFileDialog.FileName = "openFileDialog1";
             // 
-            // rainbowEnemySkeletonESPCheckBox
+            // enemyHPLabelCheckBox
             // 
-            this.rainbowEnemySkeletonESPCheckBox.AutoSize = true;
-            this.rainbowEnemySkeletonESPCheckBox.Location = new System.Drawing.Point(208, 75);
-            this.rainbowEnemySkeletonESPCheckBox.Name = "rainbowEnemySkeletonESPCheckBox";
-            this.rainbowEnemySkeletonESPCheckBox.Size = new System.Drawing.Size(172, 17);
-            this.rainbowEnemySkeletonESPCheckBox.TabIndex = 90;
-            this.rainbowEnemySkeletonESPCheckBox.Text = "Rainbow Enemy Skeleton ESP";
-            this.rainbowEnemySkeletonESPCheckBox.UseVisualStyleBackColor = true;
-            this.rainbowEnemySkeletonESPCheckBox.CheckedChanged += new System.EventHandler(this.rainbowEnemySkeletonESPCheckBox_CheckedChanged);
-            // 
-            // rainbowTeamSkeletonESPCheckBox
-            // 
-            this.rainbowTeamSkeletonESPCheckBox.AutoSize = true;
-            this.rainbowTeamSkeletonESPCheckBox.Location = new System.Drawing.Point(6, 75);
-            this.rainbowTeamSkeletonESPCheckBox.Name = "rainbowTeamSkeletonESPCheckBox";
-            this.rainbowTeamSkeletonESPCheckBox.Size = new System.Drawing.Size(167, 17);
-            this.rainbowTeamSkeletonESPCheckBox.TabIndex = 89;
-            this.rainbowTeamSkeletonESPCheckBox.Text = "Rainbow Team Skeleton ESP";
-            this.rainbowTeamSkeletonESPCheckBox.UseVisualStyleBackColor = true;
-            this.rainbowTeamSkeletonESPCheckBox.CheckedChanged += new System.EventHandler(this.rainbowTeamSkeletonESPCheckBox_CheckedChanged);
-            // 
-            // miscTab
-            // 
-            this.miscTab.Controls.Add(this.checkBox4);
-            this.miscTab.Controls.Add(this.checkBox3);
-            this.miscTab.Controls.Add(this.checkBox2);
-            this.miscTab.Controls.Add(this.checkBox1);
-            this.miscTab.Location = new System.Drawing.Point(4, 22);
-            this.miscTab.Name = "miscTab";
-            this.miscTab.Padding = new System.Windows.Forms.Padding(3);
-            this.miscTab.Size = new System.Drawing.Size(394, 179);
-            this.miscTab.TabIndex = 4;
-            this.miscTab.Text = "Misc";
-            this.miscTab.UseVisualStyleBackColor = true;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(6, 6);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(68, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "No Flash";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(6, 29);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(76, 17);
-            this.checkBox2.TabIndex = 1;
-            this.checkBox2.Text = "No Smoke";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(6, 52);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(74, 17);
-            this.checkBox3.TabIndex = 2;
-            this.checkBox3.Text = "Triggerbot";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(6, 75);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(79, 17);
-            this.checkBox4.TabIndex = 3;
-            this.checkBox4.Text = "Bunny Hop";
-            this.checkBox4.UseVisualStyleBackColor = true;
+            this.enemyHPLabelCheckBox.AutoSize = true;
+            this.enemyHPLabelCheckBox.Checked = true;
+            this.enemyHPLabelCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.enemyHPLabelCheckBox.Location = new System.Drawing.Point(6, 98);
+            this.enemyHPLabelCheckBox.Name = "enemyHPLabelCheckBox";
+            this.enemyHPLabelCheckBox.Size = new System.Drawing.Size(105, 17);
+            this.enemyHPLabelCheckBox.TabIndex = 4;
+            this.enemyHPLabelCheckBox.Text = "Enemy HP Label";
+            this.enemyHPLabelCheckBox.UseVisualStyleBackColor = true;
+            this.enemyHPLabelCheckBox.CheckedChanged += new System.EventHandler(this.enemyHPLabelCheckBox_CheckedChanged);
             // 
             // MainForm
             // 
@@ -789,10 +808,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.rdrTopLeftX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radarBlipSizeNumberBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radarSizeNumberBox)).EndInit();
-            this.configTab.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
             this.miscTab.ResumeLayout(false);
             this.miscTab.PerformLayout();
+            this.configTab.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -852,9 +871,10 @@
         public System.Windows.Forms.CheckBox rainbowEnemySkeletonESPCheckBox;
         public System.Windows.Forms.CheckBox rainbowTeamSkeletonESPCheckBox;
         private System.Windows.Forms.TabPage miscTab;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox bunnyHopCheckbox;
+        private System.Windows.Forms.CheckBox triggerBotCheckBox;
+        private System.Windows.Forms.CheckBox noSmokeCheckBox;
+        private System.Windows.Forms.CheckBox noFlashCheckBox;
+        private System.Windows.Forms.CheckBox enemyHPLabelCheckBox;
     }
 }

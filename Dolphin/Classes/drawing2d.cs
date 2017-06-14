@@ -2,6 +2,8 @@
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using FontFactory = SharpDX.DirectWrite.Factory;
+
+using static Dolphin.Classes.GlobalVariables;
 using static Dolphin.Classes.Skeleton;
 
 namespace Dolphin.Classes
@@ -116,9 +118,9 @@ namespace Dolphin.Classes
         /// <param name="p2"></param>
         /// <param name="device"></param>
         /// <param name="color"></param>
-        public static void DrawLine(Vector2 p1, Vector2 p2, WindowRenderTarget device, Color color)
+        public static void DrawLine(Vector2 p1, Vector2 p2, Color color)
         {
-            device.DrawLine(p1, p2, getBrush(color, device));
+            RenderDevice.DrawLine(p1, p2, getBrush(color));
         }
 
         /// <summary>
@@ -128,10 +130,10 @@ namespace Dolphin.Classes
         /// <param name="radius"></param>
         /// <param name="color"></param>
         /// <param name="device"></param>
-        public static void DrawRadarBlip(Vector2 pos, int radius, Color color, WindowRenderTarget device)
+        public static void DrawRadarBlip(Vector2 pos, int radius, Color color)
         {
-            device.DrawEllipse(new Ellipse(pos, radius, radius), getBrush(color, device));
-            device.DrawEllipse(new Ellipse(pos, radius / 5, radius / 5), getBrush(Color.White, device));
+            RenderDevice.DrawEllipse(new Ellipse(pos, radius, radius), getBrush(color));
+            RenderDevice.DrawEllipse(new Ellipse(pos, radius / 5, radius / 5), getBrush(Color.White));
         }
 
         /// <summary>
@@ -140,9 +142,9 @@ namespace Dolphin.Classes
         /// <param name="color"></param>
         /// <param name="device"></param>
         /// <returns></returns>
-        public static SolidColorBrush getBrush(Color color, WindowRenderTarget device)
+        public static SolidColorBrush getBrush(Color color)
         {
-            return new SolidColorBrush(device, color);
+            return new SolidColorBrush(RenderDevice, color);
         }
 
         /// <summary>
@@ -156,23 +158,23 @@ namespace Dolphin.Classes
         /// <param name="device"></param>
         /// <param name="fontFactory"></param>
         /// <param name="screenSize"></param>
-        public static void DrawShadowText(float x, float y, float fontSize, Color fontColour, string text, WindowRenderTarget device, FontFactory fontFactory, Size2 screenSize)
+        public static void DrawShadowText(float x, float y, float fontSize, Color fontColour, string text)
         {
             string fontFamily = "Arial";
 
-            SolidColorBrush textBrush = new SolidColorBrush(device, Color.Black);
-            TextFormat textFormat = new TextFormat(fontFactory, fontFamily, fontSize);
-            TextLayout textLayout = new TextLayout(fontFactory, text, textFormat, screenSize.Width, screenSize.Height);
+            SolidColorBrush textBrush = new SolidColorBrush(RenderDevice, Color.Black);
+            TextFormat textFormat = new TextFormat(DXFontFactory, fontFamily, fontSize);
+            TextLayout textLayout = new TextLayout(DXFontFactory, text, textFormat, WindowSize.Width, WindowSize.Height);
 
             //black
-            device.DrawTextLayout(new Vector2(x - 1, y + 1), textLayout, textBrush);
-            device.DrawTextLayout(new Vector2(x - 1, y - 1), textLayout, textBrush);
-            device.DrawTextLayout(new Vector2(x + 1, y + 1), textLayout, textBrush);
-            device.DrawTextLayout(new Vector2(x + 1, y - 1), textLayout, textBrush);
+            RenderDevice.DrawTextLayout(new Vector2(x - 1, y + 1), textLayout, textBrush);
+            RenderDevice.DrawTextLayout(new Vector2(x - 1, y - 1), textLayout, textBrush);
+            RenderDevice.DrawTextLayout(new Vector2(x + 1, y + 1), textLayout, textBrush);
+            RenderDevice.DrawTextLayout(new Vector2(x + 1, y - 1), textLayout, textBrush);
 
             //coloured
-            textBrush = new SolidColorBrush(device, fontColour);
-            device.DrawTextLayout(new Vector2(x, y), textLayout, textBrush);
+            textBrush = new SolidColorBrush(RenderDevice, fontColour);
+            RenderDevice.DrawTextLayout(new Vector2(x, y), textLayout, textBrush);
         }
 
         /// <summary>
@@ -193,20 +195,26 @@ namespace Dolphin.Classes
                 Bottom = feetPos.Y,
                 Left = feetPos.X - width / 2.0f,
                 Right = feetPos.X + width / 2.0f
-            }, getBrush(color, device));
+            }, getBrush(color));
         }
 
+        /// <summary>
+        /// Draws a line from bone to bone using bone IDs
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="bone1"></param>
+        /// <param name="bone2"></param>
+        /// <param name="color"></param>
         public static void DrawBone(Entity entity, int bone1, int bone2, Color color)
         {
             DrawLine(
-                GetW2SBone(entity.Entity_BoneBase, bone1, GlobalVariables.Mem, GlobalVariables.ViewMatrix, GlobalVariables.WindowSize),
-                GetW2SBone(entity.Entity_BoneBase, bone2, GlobalVariables.Mem, GlobalVariables.ViewMatrix, GlobalVariables.WindowSize),
-                GlobalVariables.Device,
+                GetW2SBone(entity.Entity_BoneBase, bone1, Mem, ViewMatrix, WindowSize),
+                GetW2SBone(entity.Entity_BoneBase, bone2, Mem, ViewMatrix, WindowSize),
                 color);
         }
 
         /// <summary>
-        /// Draws an entity's skeleton
+        /// Draws an entity's skeleton based on their model
         /// </summary>
         /// <param name="BoneBase"></param>
         /// <param name="Mem"></param>

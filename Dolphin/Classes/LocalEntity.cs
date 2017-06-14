@@ -22,7 +22,7 @@ namespace Dolphin.Classes
         }
         public int LocalEntity_CrosshairID
         {
-            get { return Mem.ReadInt(LocalEntity_Base + LocalEntity_CrosshairID); }
+            get { return Mem.ReadInt(LocalEntity_Base + m_iCrosshairId); }
         }
         public int LocalEntity_EntityInCrosshair
         {

@@ -10,6 +10,11 @@ using System.Threading;
 
 using Dolphin.Classes;
 using static Dolphin.Classes.GlobalVariables;
+using static Dolphin.Classes.Glow;
+using static Dolphin.Classes.ESP;
+using static Dolphin.Classes.Radar;
+using static Dolphin.Classes.Triggerbot;
+
 using static hazedumper.signatures;
 
 namespace Dolphin
@@ -24,22 +29,22 @@ namespace Dolphin
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.DoubleBuffered = true;
-            this.Width = 64;// set your own size
-            this.Height = 64;
-            this.Location = new System.Drawing.Point(0, 0);
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer |// this reduce the flicker
+            DoubleBuffered = true;
+            Width = 64;
+            Height = 64;
+            Location = new System.Drawing.Point(0, 0);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer |
                 ControlStyles.AllPaintingInWmPaint |
                 ControlStyles.DoubleBuffer |
                 ControlStyles.UserPaint |
                 ControlStyles.Opaque |
                 ControlStyles.ResizeRedraw |
                 ControlStyles.SupportsTransparentBackColor, true);
-            this.TopMost = true;
-            this.Visible = true;
+            TopMost = true;
+            Visible = true;
 
-            GlobalVariables.Factory = new Factory();
-            GlobalVariables.FontFactory = new FontFactory();
+            DXFactory = new Factory();
+            DXFontFactory = new FontFactory();
 
             while (!IsRunning)
             {
@@ -55,7 +60,7 @@ namespace Dolphin
             };
 
             //Init DirectX
-            GlobalVariables.Device = new WindowRenderTarget(GlobalVariables.Factory, new RenderTargetProperties(new PixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)), DeviceRenderProperties);
+            RenderDevice = new WindowRenderTarget(DXFactory, new RenderTargetProperties(new PixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)), DeviceRenderProperties);
 
             LoopThread = new Thread(new ParameterizedThreadStart(SDXThread));
 
@@ -102,9 +107,9 @@ namespace Dolphin
                 // set the size of the form overlay
                 WindowSize = new Size2(WindowBounds.Width, WindowBounds.Height);
 
-                GlobalVariables.Device.BeginDraw();
-                GlobalVariables.Device.Clear(Color.Transparent);
-                GlobalVariables.Device.TextAntialiasMode = TextAntialiasMode.Aliased; // you can set another text mode
+                RenderDevice.BeginDraw();
+                RenderDevice.Clear(Color.Transparent);
+                RenderDevice.TextAntialiasMode = TextAntialiasMode.Aliased; // you can set another text mode
                 
                 //place your rendering things here
                 if (GetActiveWindowTitle() == "Counter-Strike: Global Offensive" || GetActiveWindowTitle() == "Dolphin")
@@ -114,34 +119,14 @@ namespace Dolphin
                     // Create Local Entity
                     LocalEntity LE = new LocalEntity();
 
-                    // get current mapname
-                    CurrentMapName = MapInfo.getCurrentMapName(Mem);
-
-                    // check for map change to change map image for radar
-                    if(CurrentMapName != LastMapName)
-                    {
-                        LastMapName = CurrentMapName;
-                        MapImage = Drawing2D.LoadFromFile(GlobalVariables.Device, MapInfo.getCurrentMapImage(CurrentMapName));
-                    }
-                    
-                    // radar bounds
-                    SharpDX.Mathematics.Interop.RawRectangleF radarBounds = new SharpDX.Mathematics.Interop.RawRectangleF()
-                    {
-                        Top = RadarTopLeftPosition.Y, Bottom = RadarTopLeftPosition.Y + RadarSize,
-                        Left = RadarTopLeftPosition.X, Right = RadarTopLeftPosition.X + RadarSize
-                    };
-
-                    // draw radar bounds and map image
-                    if (RadarEnabled)
-                    {
-                        GlobalVariables.Device.DrawBitmap(MapImage, radarBounds, RadarOpacity, BitmapInterpolationMode.Linear);
-                        GlobalVariables.Device.DrawRectangle(radarBounds, Drawing2D.getBrush(Color.White, GlobalVariables.Device));
-                    }
-
                     // update viewmatrix
                     ViewMatrix = Matrix4x4.ReadMatrix(Mem, dwClient + dwViewMatrix);
 
-                    // perform this loop for every entity
+                    // Update radar image (in case of map change)
+                    if (RadarEnabled)
+                        RadarImageUpdate();
+                   
+                    // perform this loop for every entity in the game
                     for (int i = 0; i < 32; i++)
                     {
                         // increment rainbow cycle colour
@@ -150,112 +135,37 @@ namespace Dolphin
                         // create new entity instance
                         Entity Entity = new Entity(i);
 
-                        // Do ESP
-                        if(Entity.Entity_isAlive() && Entity.Entity_Base != LE.LocalEntity_Base)
+                        // Call Radar if enabled on GUI
+                        if (RadarEnabled)
                         {
-                            // friendly box esp
-                            if (BoxESPEnabledFriendly && Entity.Entity_Team == LE.LocalEntity_Team)
-                            {
-                                if(RainbowBoxESPEnabledFriendly)
-                                {
-                                    Drawing2D.DrawESPBox(
-                                        Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
-                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)), GlobalVariables.Device);
-                                }
-                                else
-                                {
-                                    Drawing2D.DrawESPBox(
-                                        Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
-                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(BoxESPTeamARGB), GlobalVariables.Device);
-                                }
-                            }
-
-                            // friendly skeleton esp
-                            if (SkeletonsEnabledFriendly && Entity.Entity_Team == LE.LocalEntity_Team)
-                            {
-                                if(RainbowSkeletonESPEnabledFriendly)
-                                {
-                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)));
-                                }
-                                else
-                                {
-                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(SkeletonESPTeamARGB));
-                                }
-                            }
-
-                            // enenmy box esp
-                            if (BoxESPEnabledOpposition && Entity.Entity_Team != LE.LocalEntity_Team)
-                            {
-                                if(RainbowBoxESPEnabledOpposition)
-                                {
-                                    Drawing2D.DrawESPBox(
-                                        Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
-                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)), GlobalVariables.Device);
-                                }
-                                else
-                                {
-                                    Drawing2D.DrawESPBox(
-                                        Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
-                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(BoxESPEnemyARGB), GlobalVariables.Device);
-                                }
-                            }
-
-                            // enemy skeleton esp
-                            if (SkeletonsEnabledOpposition && Entity.Entity_Team != LE.LocalEntity_Team)
-                            {
-                                if(RainbowSkeletonESPEnabledOpposition)
-                                {
-                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)));
-                                }
-                                else
-                                {
-                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(SkeletonESPEnemyARGB));
-                                }
-
-                            }
+                            RadarLoop(Entity, LE);
                         }
 
-                        // Do HP Label
-                        if (Entity.Entity_Team != LE.LocalEntity_Team && Entity.Entity_isAlive())
+                        // Call ESP if enabled on GUI
+                        if (BoxESPEnabledFriendly || BoxESPEnabledOpposition || SkeletonsEnabledFriendly || SkeletonsEnabledOpposition)
                         {
-                            Drawing2D.DrawShadowText(Entity.Entity_Position_W2S.X - 20, Entity.Entity_Position_W2S.Y, 12.0f, Color.Lime, ("《 ❤ " + Entity.Entity_Health + " 》"), GlobalVariables.Device, GlobalVariables.FontFactory, WindowSize);
+                            ESPLoop(Entity, LE, progress);
                         }
 
-                        // Do Glow
+                        // Draw HP Label if enabled on GUI
+                        if (IsEnabled_EnemyHPLabel && Entity.Entity_Team != LE.LocalEntity_Team && Entity.Entity_isAlive())
+                        {
+                            Drawing2D.DrawShadowText(Entity.Entity_Position_W2S.X - 20, Entity.Entity_Position_W2S.Y, 12.0f, Color.Lime, ("《 ❤ " + Entity.Entity_Health + " 》"));
+                        }
+
+                        // Draw Glow if enabled on GUI
                         if (GlowEnabledOpposition || GlowEnabledFriendly)
                         {
-                            Glow.DoGlow(Mem, Entity, LE, progress);
+                            DoGlow(Mem, Entity, LE, progress);
                         }
 
-                        // translate entity 3d coords into 2d radar coords
-                        Vector3 normalisedRadarPos = Drawing2D.normaliseCoords((int)radarBounds.Left, (int)radarBounds.Right, (int)radarBounds.Top, (int)radarBounds.Bottom, MapInfo.getCurrentMapInfo(CurrentMapName), Entity.Entity_Position_3D);
-                        
-                        // draw radar blips
-                        if (Entity.Entity_isAlive() && RadarEnabled)
-                        {
-                            if (Entity.Entity_Team != LE.LocalEntity_Team)
-                                Drawing2D.DrawRadarBlip(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), RadarBlipSize, Color.Red, GlobalVariables.Device);
-                            else if (Entity.Entity_Base == LE.LocalEntity_Base)
-                            {
-                                Drawing2D.DrawRadarBlip(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), RadarBlipSize, Color.Yellow, GlobalVariables.Device);
-                                GlobalVariables.Device.DrawEllipse(new Ellipse(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), 50, 50), Drawing2D.getBrush(Color.White, GlobalVariables.Device));
-                            }
-                            else
-                                Drawing2D.DrawRadarBlip(new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y), RadarBlipSize, Color.LimeGreen, GlobalVariables.Device);
-
-                            if (Entity.Entity_Team != LE.LocalEntity_Team)
-                            {
-                                Vector2 posx = new Vector2(normalisedRadarPos.X, normalisedRadarPos.Y);
-                                Vector2 posy = new Vector2(radarBounds.Right, radarBounds.Top + (i * 20));
-                                Drawing2D.DrawLine(posx, posy, GlobalVariables.Device, Color.Red);
-                                Drawing2D.DrawShadowText(posy.X, posy.Y - 5, 20, Color.White, "HP: " + Entity.Entity_Health, GlobalVariables.Device, GlobalVariables.FontFactory, WindowSize);
-                            }
-                        }
+                        // Call trigger if enabled on GUI
+                        if (IsEnabled_TriggerBot)
+                            TriggerbotLoop(LE);
                     }
                     Thread.Sleep(1);
                 }
-
-                GlobalVariables.Device.EndDraw();
+                RenderDevice.EndDraw();
             }
         }
     }

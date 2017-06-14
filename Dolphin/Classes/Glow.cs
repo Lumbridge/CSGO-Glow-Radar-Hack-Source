@@ -10,6 +10,12 @@ namespace Dolphin.Classes
 {
     class Glow
     {
+        public static bool GlowEnabledFriendly, GlowEnabledOpposition;
+        public static bool RainbowGlowEnabledFriendly, RainbowGlowEnabledOpposition;
+        public static bool HPToColourEnabledFriendly, HPToColourEnabledOpposition;
+        public static Color GlowEnemyARGB, GlowTeamARGB;
+        public static int GlowAlpha = 255;
+
         public struct GlowStruct
         {
             public float r;
@@ -19,6 +25,7 @@ namespace Dolphin.Classes
             public bool rwo;
             public bool rwuo;
         }
+
         public static Color HPtoColour(int health)
         {
             if (health >= 75)
@@ -28,6 +35,7 @@ namespace Dolphin.Classes
             else
                 return Color.FromArgb(255, 255, 0, 0);
         }
+
         public static Color Rainbow(float progress)
         {
             float div = (System.Math.Abs(progress % 1) * 6);
@@ -50,6 +58,7 @@ namespace Dolphin.Classes
                     return Color.FromArgb(255, 255, 0, descending);
             }
         }
+
         private static void DrawGlow(int glowAddress, GlowStruct colours, ProcessMemory Mem)
         {
             object objectValue = RuntimeHelpers.GetObjectValue(Mem.ReadInt(dwClient + dwGlowObjectManager));
@@ -60,12 +69,13 @@ namespace Dolphin.Classes
             Mem.WriteBool(Conversions.ToInteger(Operators.AddObject(objectValue, (glowAddress * 0x38) + 0x24)), colours.rwo);
             Mem.WriteBool(Conversions.ToInteger(Operators.AddObject(objectValue, (glowAddress * 0x38) + 0x25)), colours.rwuo);
         }
+
         public static void DoGlow(ProcessMemory Mem, Entity cEntity, LocalEntity cLocalEntity, float rainbowProgress)
         {
             Color friTemp = GlowTeamARGB;
             Color oppTemp = GlowEnemyARGB;
 
-            if(RainbowEnabledOpposition)
+            if(RainbowGlowEnabledOpposition)
             {
                 oppTemp = Rainbow(rainbowProgress);
             }
@@ -88,7 +98,7 @@ namespace Dolphin.Classes
                 rwuo = false
             };
 
-            if (RainbowEnabledFriendly)
+            if (RainbowGlowEnabledFriendly)
             {
                 friTemp = Rainbow(rainbowProgress);
             }

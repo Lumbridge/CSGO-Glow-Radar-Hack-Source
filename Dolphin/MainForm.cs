@@ -3,6 +3,10 @@ using System.Windows.Forms;
 using System.IO;
 
 using static Dolphin.Classes.GlobalVariables;
+using static Dolphin.Classes.Glow;
+using static Dolphin.Classes.ESP;
+using static Dolphin.Classes.Radar;
+using static Dolphin.Classes.Triggerbot;
 
 namespace Dolphin
 {
@@ -32,8 +36,8 @@ namespace Dolphin
             GlowEnabledOpposition = false;
 
             // default glow rainbow settings
-            RainbowEnabledFriendly = false;
-            RainbowEnabledOpposition = false;
+            RainbowGlowEnabledFriendly = false;
+            RainbowGlowEnabledOpposition = false;
 
             // default ESP rainbow settings
             RainbowBoxESPEnabledFriendly = false;
@@ -55,6 +59,13 @@ namespace Dolphin
             RadarBlipSize = 5;
             RadarOpacity = 1.0f;
             RadarTopLeftPosition = new SharpDX.Vector2(286, 40);
+
+            // default misc tab settings
+            IsEnabled_Noflash = false;
+            IsEnabled_NoSmoke = false;
+            IsEnabled_TriggerBot = false;
+            IsEnabled_BunnyHop = false;
+            IsEnabled_EnemyHPLabel = true;
 
             // set default glow tab UI button colours
             teamColourPickButton.BackColor = GlowTeamARGB;
@@ -158,12 +169,12 @@ namespace Dolphin
 
         private void rainbowEnemyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            RainbowEnabledOpposition = rainbowEnemyCheckBox.Checked;
+            RainbowGlowEnabledOpposition = rainbowEnemyCheckBox.Checked;
         }
 
         private void rainbowTeamCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            RainbowEnabledFriendly = rainbowTeamCheckbox.Checked;
+            RainbowGlowEnabledFriendly = rainbowTeamCheckbox.Checked;
         }
 
         private void enableRadarCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -313,12 +324,12 @@ namespace Dolphin
             }
 
             glowEnabledTeamCheckBox.Checked = GlowEnabledFriendly;
-            rainbowTeamCheckbox.Checked = RainbowEnabledFriendly;
+            rainbowTeamCheckbox.Checked = RainbowGlowEnabledFriendly;
             teamColourBasedOnHPCheckBox.Checked = HPToColourEnabledFriendly;
             teamColourPickButton.BackColor = GlowTeamARGB;
 
             glowEnabledEnemyCheckBox.Checked = GlowEnabledOpposition;
-            rainbowEnemyCheckBox.Checked = RainbowEnabledOpposition;
+            rainbowEnemyCheckBox.Checked = RainbowGlowEnabledOpposition;
             enemyColourBasedOnHPCheckBox.Checked = HPToColourEnabledOpposition;
             enemyColourPickButton.BackColor = GlowEnemyARGB;
 
@@ -331,7 +342,7 @@ namespace Dolphin
 
             enableEnemyBoxESPCheckBox.Checked = BoxESPEnabledOpposition;
             enableEnemySkeletonsCheckbox.Checked = SkeletonsEnabledOpposition;
-            rainbowEnemyBoxESPCheckBox.Checked = RainbowEnabledOpposition;
+            rainbowEnemyBoxESPCheckBox.Checked = RainbowGlowEnabledOpposition;
 
             enableRadarCheckBox.Checked = RadarEnabled;
             radarSizeNumberBox.Value = RadarSize;
@@ -339,6 +350,33 @@ namespace Dolphin
             rdrTopLeftX.Value = (decimal)RadarTopLeftPosition.X;
             rdrTopLeftY.Value = (decimal)RadarTopLeftPosition.Y;
             radarOpacityNumberBox.Value = (decimal)RadarOpacity;
+        }
+        #endregion
+
+        #region Misc Tab
+        private void noFlashCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            IsEnabled_Noflash = noFlashCheckBox.Checked;
+        }
+
+        private void noSmokeCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            IsEnabled_NoSmoke = noSmokeCheckBox.Checked;
+        }
+
+        private void triggerBotCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            IsEnabled_TriggerBot = triggerBotCheckBox.Checked;
+        }
+
+        private void bunnyHopCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            IsEnabled_BunnyHop = bunnyHopCheckbox.Checked;
+        }
+
+        private void enemyHPLabelCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            IsEnabled_EnemyHPLabel = enemyHPLabelCheckBox.Checked;
         }
         #endregion
     }

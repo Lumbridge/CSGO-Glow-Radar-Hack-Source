@@ -1,7 +1,5 @@
 ﻿using SharpDX;
-using System;
 using System.Text.RegularExpressions;
-
 using static Dolphin.Classes.GlobalVariables;
 using static hazedumper.signatures;
 
@@ -9,6 +7,8 @@ namespace Dolphin.Classes
 {
     class MapInfo
     {
+        public static string CurrentMapName, LastMapName;
+
         public struct map
         {
             public Vector2 topLeft;
@@ -25,6 +25,44 @@ namespace Dolphin.Classes
                 else if (currentMapName.Contains(name) && currentMapName != name)
                     return name;
             return "unknown";
+        }
+
+        public static string getCurrentMapName()
+        {
+            byte[] mapnamedata = new byte[32];
+
+            int clientState = Mem.ReadInt(dwEngine + dwClientState);
+            mapnamedata = Mem.ReadMem(clientState + dwClientState_Map, 256);
+
+            Regex rgx = new Regex("[^a-zA-Z0-9 _-]");
+
+            var currentmapname = System.Text.Encoding.Default.GetString(mapnamedata);
+
+            currentmapname = rgx.Replace(currentmapname, "");
+
+            int index = currentmapname.IndexOf('\0');
+
+            if (index > 0)
+                currentmapname = currentmapname.Substring(0, index);
+
+            index = currentmapname.IndexOf("dss");
+
+            if (index > 0)
+                currentmapname = currentmapname.Substring(0, index);
+
+            currentmapname = currentmapname.Replace("de_", "");
+            currentmapname = currentmapname.Replace("e_", "");
+            currentmapname = currentmapname.Replace("dmg_", "");
+            currentmapname = currentmapname.Replace("ar_", "");
+            currentmapname = currentmapname.Replace("coop_", "");
+            currentmapname = currentmapname.Replace("cs_", "");
+            currentmapname = currentmapname.Replace("gd_", "");
+            currentmapname = currentmapname.Replace("training1_", "");
+
+            currentmapname = fixMapName(currentmapname);
+
+            return currentmapname;
+
         }
 
         public static System.Drawing.Bitmap getCurrentMapImage(string currentMap)
@@ -52,43 +90,6 @@ namespace Dolphin.Classes
                 default:
                     return Properties.Resources.unknown;
             }
-        }
-
-        public static string getCurrentMapName(ProcessMemory Mem)
-        {
-            byte[] mapnamedata = new byte[32];
-
-            int clientState = Mem.ReadInt(dwEngine + dwClientState);
-            mapnamedata = Mem.ReadMem(clientState + dwClientState_Map, 256);
-
-            Regex rgx = new Regex("[^a-zA-Z0-9 _-]");
-
-            var currentmapname = System.Text.ASCIIEncoding.Default.GetString(mapnamedata);
-
-            currentmapname = rgx.Replace(currentmapname, "");
-
-            int index = currentmapname.IndexOf('\0');
-
-            if (index > 0)
-                currentmapname = currentmapname.Substring(0, index);
-
-            index = currentmapname.IndexOf("dss");
-
-            if (index > 0)
-                currentmapname = currentmapname.Substring(0, index);
-
-            currentmapname = currentmapname.Replace("de_", "");
-            currentmapname = currentmapname.Replace("e_", "");
-            currentmapname = currentmapname.Replace("dmg_", "");
-            currentmapname = currentmapname.Replace("ar_", "");
-            currentmapname = currentmapname.Replace("coop_", "");
-            currentmapname = currentmapname.Replace("cs_", "");
-            currentmapname = currentmapname.Replace("gd_", "");
-            currentmapname = currentmapname.Replace("training1_", "");
-            
-            currentmapname = fixMapName(currentmapname);
-
-            return currentmapname;
         }
 
         public static map getCurrentMapInfo(string mapname)
