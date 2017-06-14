@@ -62,24 +62,27 @@ namespace Dolphin.Classes
         }
         public static void DoGlow(ProcessMemory Mem, Entity cEntity, LocalEntity cLocalEntity, float rainbowProgress)
         {
+            Color friTemp = GlowTeamARGB;
+            Color oppTemp = GlowEnemyARGB;
+
             if(RainbowEnabledOpposition)
             {
-                GlowEnemyARGB = Rainbow(rainbowProgress);
+                oppTemp = Rainbow(rainbowProgress);
             }
             else if(HPToColourEnabledOpposition)
             {
-                GlowEnemyARGB = HPtoColour(cEntity.Entity_Health);
+                oppTemp = HPtoColour(cEntity.Entity_Health);
             }
             else
             {
-                GlowEnemyARGB = Color.FromArgb(255, GlowOppositionR, GlowOppositionG, GlowOppositionB);
+                oppTemp = GlowEnemyARGB;
             }
 
             GlowStruct opposition = new GlowStruct
             {
-                r = (float)((GlowEnemyARGB.R) / 255.0),
-                g = (float)((GlowEnemyARGB.G) / 255.0),
-                b = (float)((GlowEnemyARGB.B) / 255.0),
+                r = (float)((oppTemp.R) / 255.0),
+                g = (float)((oppTemp.G) / 255.0),
+                b = (float)((oppTemp.B) / 255.0),
                 a = (float)((GlowAlpha) / 255.0),
                 rwo = true,
                 rwuo = false
@@ -87,22 +90,22 @@ namespace Dolphin.Classes
 
             if (RainbowEnabledFriendly)
             {
-                GlowTeamARGB = Rainbow(rainbowProgress);
+                friTemp = Rainbow(rainbowProgress);
             }
             else if (HPToColourEnabledFriendly)
             {
-                GlowTeamARGB = HPtoColour(cEntity.Entity_Health);
+                friTemp = HPtoColour(cEntity.Entity_Health);
             }
             else
             {
-                GlowTeamARGB = Color.FromArgb(255, GlowFriendlyR, GlowFriendlyG, GlowFriendlyB);
+                friTemp = GlowTeamARGB;
             }
 
             GlowStruct team = new GlowStruct
             {
-                r = (float)((GlowTeamARGB.R) / 255.0),
-                g = (float)((GlowTeamARGB.G) / 255.0),
-                b = (float)((GlowTeamARGB.B) / 255.0),
+                r = (float)((friTemp.R) / 255.0),
+                g = (float)((friTemp.G) / 255.0),
+                b = (float)((friTemp.B) / 255.0),
                 a = (float)((GlowAlpha) / 255.0),
                 rwo = true,
                 rwuo = false

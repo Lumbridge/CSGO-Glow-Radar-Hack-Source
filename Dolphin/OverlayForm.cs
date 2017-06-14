@@ -156,7 +156,7 @@ namespace Dolphin
                             // friendly box esp
                             if (BoxESPEnabledFriendly && Entity.Entity_Team == LE.LocalEntity_Team)
                             {
-                                if(RainbowESPEnabledFriendly)
+                                if(RainbowBoxESPEnabledFriendly)
                                 {
                                     Drawing2D.DrawESPBox(
                                         Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
@@ -166,27 +166,27 @@ namespace Dolphin
                                 {
                                     Drawing2D.DrawESPBox(
                                         Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
-                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(ESPTeamARGB), GlobalVariables.Device);
+                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(BoxESPTeamARGB), GlobalVariables.Device);
                                 }
                             }
 
                             // friendly skeleton esp
                             if (SkeletonsEnabledFriendly && Entity.Entity_Team == LE.LocalEntity_Team)
                             {
-                                if(RainbowESPEnabledFriendly)
+                                if(RainbowSkeletonESPEnabledFriendly)
                                 {
                                     Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)));
                                 }
                                 else
                                 {
-                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(ESPTeamARGB));
+                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(SkeletonESPTeamARGB));
                                 }
                             }
 
                             // enenmy box esp
                             if (BoxESPEnabledOpposition && Entity.Entity_Team != LE.LocalEntity_Team)
                             {
-                                if(RainbowESPEnabledOpposition)
+                                if(RainbowBoxESPEnabledOpposition)
                                 {
                                     Drawing2D.DrawESPBox(
                                         Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
@@ -196,20 +196,20 @@ namespace Dolphin
                                 {
                                     Drawing2D.DrawESPBox(
                                         Skeleton.GetW2SBone(Entity.Entity_BoneBase, Skeleton.Bone.Head, Mem, ViewMatrix, WindowSize),
-                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(ESPEnemyARGB), GlobalVariables.Device);
+                                        Entity.Entity_Position_W2S, Drawing2D.SystemColorToSharpColor(BoxESPEnemyARGB), GlobalVariables.Device);
                                 }
                             }
 
                             // enemy skeleton esp
                             if (SkeletonsEnabledOpposition && Entity.Entity_Team != LE.LocalEntity_Team)
                             {
-                                if(RainbowESPEnabledOpposition)
+                                if(RainbowSkeletonESPEnabledOpposition)
                                 {
                                     Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(Glow.Rainbow(progress)));
                                 }
                                 else
                                 {
-                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(ESPEnemyARGB));
+                                    Drawing2D.DrawSkeleton(Entity, Drawing2D.SystemColorToSharpColor(SkeletonESPEnemyARGB));
                                 }
 
                             }
