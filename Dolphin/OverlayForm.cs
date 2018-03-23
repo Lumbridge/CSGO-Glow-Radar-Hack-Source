@@ -29,6 +29,8 @@ namespace Dolphin
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            SetLayeredWindowAttributes(Handle, (uint)0, 255, 0x00000002);
+
             DoubleBuffered = true;
             Width = 64;
             Height = 64;

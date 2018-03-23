@@ -65,26 +65,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Drawing2D.cs" />
     <Compile Include="Classes\Entity.cs" />
-    <Compile Include="Classes\ESP.cs" />
-    <Compile Include="Classes\Geometry.cs" />
     <Compile Include="Classes\GlobalVariables.cs" />
     <Compile Include="Classes\Glow.cs" />
-    <Compile Include="Classes\MapInfo.cs" />
-    <Compile Include="Classes\Matrix4x4.cs" />
+    <Compile Include="Classes\NoFlash.cs" />
     <Compile Include="Classes\Offsets.cs" />
     <Compile Include="Classes\LocalEntity.cs" />
     <Compile Include="Classes\ProcessMemory.cs" />
-    <Compile Include="Classes\Radar.cs" />
-    <Compile Include="Classes\Skeleton.cs" />
     <Compile Include="Classes\Triggerbot.cs" />
-    <Compile Include="OverlayForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OverlayForm.Designer.cs">
-      <DependentUpon>OverlayForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,9 +81,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="OverlayForm.resx">
-      <DependentUpon>OverlayForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

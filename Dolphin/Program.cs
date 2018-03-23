@@ -16,7 +16,7 @@ namespace Dolphin
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new OverlayForm());
+            Application.Run(new MainForm());
         }
     }
 }

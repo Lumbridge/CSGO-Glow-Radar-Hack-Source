@@ -2,82 +2,105 @@
 using System.Windows.Forms;
 using System.IO;
 
-using static Dolphin.Classes.GlobalVariables;
 using static Dolphin.Classes.Glow;
-using static Dolphin.Classes.ESP;
-using static Dolphin.Classes.Radar;
 using static Dolphin.Classes.Triggerbot;
+using static Dolphin.Classes.GlobalVariables;
+using static Dolphin.Classes.NoFlash;
+using System.Threading;
+using Dolphin.Classes;
 
 namespace Dolphin
 {
     public partial class MainForm : Form
     {        
-        public MainForm(OverlayForm overlayForm)
+        public MainForm()
         {
             InitializeComponent();
+            IsRunning = GetProcessAndHandles();
+
+            while (!IsRunning)
+            {
+                IsRunning = GetProcessAndHandles();
+                Thread.Sleep(1);
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // default team ESP colours
-            BoxESPTeamARGB = System.Drawing.Color.FromArgb(255, 255, 255, 255);
-            SkeletonESPTeamARGB = System.Drawing.Color.FromArgb(255, 0, 255, 0);
-
-            // default enenmy ESP colours
-            BoxESPEnemyARGB = System.Drawing.Color.FromArgb(255, 255, 255, 255);
-            SkeletonESPEnemyARGB = System.Drawing.Color.FromArgb(255, 255, 0, 0);
-
             // default glow colours
             GlowTeamARGB = System.Drawing.Color.FromArgb(255, 0, 255, 0);
             GlowEnemyARGB = System.Drawing.Color.FromArgb(255, 255, 0, 0);
 
             // default glow settings
             GlowEnabledFriendly = false;
-            GlowEnabledOpposition = false;
+            GlowEnabledOpposition = true;
 
             // default glow rainbow settings
             RainbowGlowEnabledFriendly = false;
             RainbowGlowEnabledOpposition = false;
-
-            // default ESP rainbow settings
-            RainbowBoxESPEnabledFriendly = false;
-            RainbowSkeletonESPEnabledFriendly = false;
-            RainbowBoxESPEnabledOpposition = false;
-            RainbowSkeletonESPEnabledOpposition = false;
-
-            // default box ESP settings
-            BoxESPEnabledFriendly = false;
-            BoxESPEnabledOpposition = true;
-
-            // default skeleton ESP settings
-            SkeletonsEnabledFriendly = false;
-            SkeletonsEnabledOpposition = true;
-
-            // default radar settings
-            RadarEnabled = true;
-            RadarSize = 300;
-            RadarBlipSize = 5;
-            RadarOpacity = 1.0f;
-            RadarTopLeftPosition = new SharpDX.Vector2(286, 40);
-
+            
             // default misc tab settings
             IsEnabled_Noflash = false;
             IsEnabled_NoSmoke = false;
             IsEnabled_TriggerBot = false;
             IsEnabled_BunnyHop = false;
-            IsEnabled_EnemyHPLabel = true;
 
             // set default glow tab UI button colours
             teamColourPickButton.BackColor = GlowTeamARGB;
             enemyColourPickButton.BackColor = GlowEnemyARGB;
 
-            // set default box ESP tab UI button colours
-            customBoxESPTeamColourButton.BackColor = BoxESPTeamARGB;
-            customBoxESPEnemyColourButton.BackColor = BoxESPEnemyARGB;
+            LoopThread = new Thread(new ParameterizedThreadStart(SDXThread));
 
-            // set default skeleton ESP tab UI button colours
-            customSkeletonESPTeamColourButton.BackColor = SkeletonESPTeamARGB;
-            customSkeletonESPEnemyColourButton.BackColor = SkeletonESPEnemyARGB;
+            LoopThread.Priority = ThreadPriority.Highest;
+            LoopThread.IsBackground = true;
+            LoopThread.Start();
+        }
+
+        public void SDXThread(object sender)
+        {
+            float progress = 0.0f;
+
+            // main loop, checks for game process & performs various hack updates
+            //
+            while (IsRunning)
+            {
+                GameHandle = GameProcess.MainWindowHandle;
+
+                if (GameProcess.HasExited)
+                    IsRunning = false;
+                
+                if (GetActiveWindowTitle() == "Counter-Strike: Global Offensive" || GetActiveWindowTitle() == "Dolphin")
+                {
+                    Mem.StartProcess();
+
+                    // Create Local Entity
+                    LocalEntity LE = new LocalEntity();
+
+                    // perform this loop for every entity in the game
+                    for (int i = 0; i < 32; i++)
+                    {
+                        // increment rainbow cycle colour
+                        progress += 0.00001f;
+
+                        // create new entity instance
+                        Entity Entity = new Entity(i);
+
+                        // Draw Glow if enabled on GUI
+                        if (GlowEnabledOpposition || GlowEnabledFriendly)
+                        {
+                            DoGlow(Mem, Entity, LE, progress);
+                        }
+
+                        // Call trigger if enabled on GUI
+                        if (IsEnabled_TriggerBot)
+                            TriggerbotLoop(LE);
+
+                        if (IsEnabled_Noflash)
+                            NoFlashLoop(LE, Mem);
+                    }
+                    Thread.Sleep(1);
+                }
+            }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -88,7 +111,7 @@ namespace Dolphin
             }
             catch (Exception ex)
             {
-                //Console.WriteLine(ex);
+                throw ex;
             }
         }
 
@@ -101,72 +124,7 @@ namespace Dolphin
         {
             GlowEnabledOpposition = glowEnabledEnemyCheckBox.Checked;
         }
-
-        private void radarSizeNumberBox_ValueChanged(object sender, EventArgs e)
-        {
-            RadarSize = (int)radarSizeNumberBox.Value;
-        }
-
-        private void radarBlipSizeNumberBox_ValueChanged(object sender, EventArgs e)
-        {
-            RadarBlipSize = (int)radarBlipSizeNumberBox.Value;
-        }
-
-        private void rdrTopLeftX_ValueChanged(object sender, EventArgs e)
-        {
-            RadarTopLeftPosition.X = (float)rdrTopLeftX.Value;
-        }
-
-        private void rdrTopLeftY_ValueChanged(object sender, EventArgs e)
-        {
-            RadarTopLeftPosition.Y = (float)rdrTopLeftY.Value;
-        }
-
-        private void radarUpButton_Click(object sender, EventArgs e)
-        {
-            RadarTopLeftPosition.Y -= 40;
-
-            if (RadarTopLeftPosition.Y < 1)
-                RadarTopLeftPosition.Y = 1;
-
-            rdrTopLeftY.Value = (int)RadarTopLeftPosition.Y;
-        }
-
-        private void radarRightButton_Click(object sender, EventArgs e)
-        {
-            RadarTopLeftPosition.X += 40;
-
-            if (RadarTopLeftPosition.X > WindowBounds.Width - RadarSize)
-                RadarTopLeftPosition.X = WindowBounds.Width - RadarSize;
-
-            rdrTopLeftX.Value = (int)RadarTopLeftPosition.X;
-        }
-
-        private void radarDownButton_Click(object sender, EventArgs e)
-        { 
-            RadarTopLeftPosition.Y += 40;
-
-            if (RadarTopLeftPosition.Y > WindowBounds.Height - RadarSize)
-                RadarTopLeftPosition.Y = WindowBounds.Height - RadarSize;
-
-            rdrTopLeftY.Value = (int)RadarTopLeftPosition.Y;
-        }
-
-        private void radarLeftButton_Click(object sender, EventArgs e)
-        {
-            RadarTopLeftPosition.X -= 40;
-
-            if (RadarTopLeftPosition.X < 1)
-                RadarTopLeftPosition.X = 1;
-
-            rdrTopLeftX.Value = (int)RadarTopLeftPosition.X;
-        }
-
-        private void radarOpacityNumberBox_ValueChanged(object sender, EventArgs e)
-        {
-            RadarOpacity = (float)radarOpacityNumberBox.Value;
-        }
-
+        
         private void rainbowEnemyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             RainbowGlowEnabledOpposition = rainbowEnemyCheckBox.Checked;
@@ -176,12 +134,7 @@ namespace Dolphin
         {
             RainbowGlowEnabledFriendly = rainbowTeamCheckbox.Checked;
         }
-
-        private void enableRadarCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            RadarEnabled = enableRadarCheckBox.Checked;
-        }
-
+        
         private void teamColourBasedOnHPCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             HPToColourEnabledFriendly = teamColourBasedOnHPCheckBox.Checked;
@@ -211,95 +164,7 @@ namespace Dolphin
                 teamColourPickButton.BackColor = GlowTeamARGB;
             }
         }
-
-        #region ESP Tab
-
-        #region ESP Team
-        private void enableTeamBoxESPCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            BoxESPEnabledFriendly = enableTeamBoxESPCheckBox.Checked;
-        }
-
-        private void enableTeamSkeletonsCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            SkeletonsEnabledFriendly = enableTeamSkeletonsCheckBox.Checked;
-        }
-
-        private void rainbowTeamESPCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            RainbowBoxESPEnabledFriendly = rainbowTeamCheckbox.Checked;
-        }
-
-        private void rainbowTeamSkeletonESPCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            RainbowSkeletonESPEnabledFriendly = rainbowTeamSkeletonESPCheckBox.Checked;
-        }
-
-        private void customBoxESPTeamColourButton_Click(object sender, EventArgs e)
-        {
-            DialogResult result = colorDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                BoxESPTeamARGB = colorDialog.Color;
-                customBoxESPTeamColourButton.BackColor = BoxESPTeamARGB;
-            }
-        }
-
-        private void customSkeletonESPTeamColourButton_Click(object sender, EventArgs e)
-        {
-            DialogResult result = colorDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                SkeletonESPTeamARGB = colorDialog.Color;
-                customBoxESPEnemyColourButton.BackColor = BoxESPEnemyARGB;
-            }
-        }
-        #endregion
-
-        #region ESP Enemy
-        private void enableEnemyBoxESPCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            BoxESPEnabledOpposition = enableEnemyBoxESPCheckBox.Checked;
-        }
-
-        private void enableEnemySkeletonsCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            SkeletonsEnabledOpposition = enableEnemySkeletonsCheckbox.Checked;
-        }
-
-        private void rainbowEnemyESPCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            RainbowBoxESPEnabledOpposition = rainbowEnemyBoxESPCheckBox.Checked;
-        }
-
-        private void rainbowEnemySkeletonESPCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            RainbowSkeletonESPEnabledOpposition = rainbowEnemySkeletonESPCheckBox.Checked;
-        }
-
-        private void customBoxESPEnemyColourButton_Click(object sender, EventArgs e)
-        {
-            DialogResult result = colorDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                BoxESPEnemyARGB = colorDialog.Color;
-                customBoxESPEnemyColourButton.BackColor = BoxESPEnemyARGB;
-            }
-        }
-
-        private void customSkeletonESPEnemyColourButton_Click(object sender, EventArgs e)
-        {
-            DialogResult result = colorDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                SkeletonESPEnemyARGB = colorDialog.Color;
-                customSkeletonESPEnemyColourButton.BackColor = SkeletonESPEnemyARGB;
-            }
-        }
-        #endregion
-
-        #endregion
-
+        
         #region Config Tab
         private void saveConfigButton_Click(object sender, EventArgs e)
         {
@@ -332,24 +197,6 @@ namespace Dolphin
             rainbowEnemyCheckBox.Checked = RainbowGlowEnabledOpposition;
             enemyColourBasedOnHPCheckBox.Checked = HPToColourEnabledOpposition;
             enemyColourPickButton.BackColor = GlowEnemyARGB;
-
-            enableTeamBoxESPCheckBox.Checked = BoxESPEnabledFriendly;
-            enableTeamSkeletonsCheckBox.Checked = SkeletonsEnabledFriendly;
-            rainbowTeamBoxESPCheckBox.Checked = RainbowBoxESPEnabledFriendly;
-            rainbowEnemyBoxESPCheckBox.Checked = RainbowBoxESPEnabledOpposition;
-            rainbowTeamSkeletonESPCheckBox.Checked = RainbowSkeletonESPEnabledFriendly;
-            rainbowEnemyBoxESPCheckBox.Checked = RainbowSkeletonESPEnabledOpposition;
-
-            enableEnemyBoxESPCheckBox.Checked = BoxESPEnabledOpposition;
-            enableEnemySkeletonsCheckbox.Checked = SkeletonsEnabledOpposition;
-            rainbowEnemyBoxESPCheckBox.Checked = RainbowGlowEnabledOpposition;
-
-            enableRadarCheckBox.Checked = RadarEnabled;
-            radarSizeNumberBox.Value = RadarSize;
-            radarBlipSizeNumberBox.Value = RadarBlipSize;
-            rdrTopLeftX.Value = (decimal)RadarTopLeftPosition.X;
-            rdrTopLeftY.Value = (decimal)RadarTopLeftPosition.Y;
-            radarOpacityNumberBox.Value = (decimal)RadarOpacity;
         }
         #endregion
 
@@ -372,11 +219,6 @@ namespace Dolphin
         private void bunnyHopCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             IsEnabled_BunnyHop = bunnyHopCheckbox.Checked;
-        }
-
-        private void enemyHPLabelCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            IsEnabled_EnemyHPLabel = enemyHPLabelCheckBox.Checked;
         }
         #endregion
     }

@@ -2,7 +2,6 @@
 using static hazedumper.signatures;
 
 using static Dolphin.Classes.GlobalVariables;
-using static Dolphin.Classes.Geometry;
 
 namespace Dolphin.Classes
 {
@@ -43,12 +42,9 @@ namespace Dolphin.Classes
             else
                 return true;
         }
-        public SharpDX.Vector2 LocalEntity_Position_W2S
+        public float LocalEntity_flashDuration
         {
-            get
-            {
-                return WorldToScreen(ViewMatrix, WindowSize, LocalEntity_Position_3D);
-            }
+            get { return Mem.ReadFloat(LocalEntity_Base + m_flFlashDuration); }
         }
         public SharpDX.Vector3 LocalEntity_Position_3D
         {

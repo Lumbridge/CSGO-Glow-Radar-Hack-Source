@@ -10,9 +10,9 @@ using System.Threading;
 using FontFactory = SharpDX.DirectWrite.Factory;
 
 using static Dolphin.Classes.Glow;
-using static Dolphin.Classes.ESP;
-using static Dolphin.Classes.Radar;
 using static Dolphin.Classes.Triggerbot;
+using System.Windows.Forms;
+using System.Text;
 
 namespace Dolphin.Classes
 {
@@ -27,31 +27,14 @@ namespace Dolphin.Classes
         public static Int32 dwClient;
         public static Int32 dwEngine;
 
-        public static Matrix4x4 ViewMatrix;
-        public static Size2 WindowSize;
-
-        public static WindowRenderTarget RenderDevice;
-        public static HwndRenderTargetProperties DeviceRenderProperties;
-
-        public static Factory DXFactory;
-        public static FontFactory DXFontFactory;
-
         public static ProcessMemory Mem = new ProcessMemory("csgo");
-
-        public static Rectangle WindowBounds = new Rectangle();
-
+        
         public static Thread LoopThread = null;
-
-        //Styles
-        public static UInt32 SWP_NOSIZE = 0x0001;
-        public static UInt32 SWP_NOMOVE = 0x0002;
-        public static UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
-        public static IntPtr HWND_TOPMOST = new IntPtr(-1);
 
         public static string GetActiveWindowTitle()
         {
             const int nChars = 256;
-            System.Text.StringBuilder Buff = new System.Text.StringBuilder(nChars);
+            StringBuilder Buff = new StringBuilder(nChars);
             IntPtr handle = GetForegroundWindow();
 
             if (GetWindowText(handle, Buff, nChars) > 0)
@@ -71,12 +54,12 @@ namespace Dolphin.Classes
             }
             catch (Exception)
             {
-                var result = System.Windows.Forms.MessageBox.Show("Game not found, launch it and click retry.", "Game Not Found", System.Windows.Forms.MessageBoxButtons.RetryCancel);
+                var result = MessageBox.Show("Game not found, launch it and click retry.", "Game Not Found", MessageBoxButtons.RetryCancel);
 
-                if (result == System.Windows.Forms.DialogResult.Cancel)
+                if (result == DialogResult.Cancel)
                 {
                     Environment.Exit(1);
-                    System.Windows.Forms.Application.Exit();
+                    Application.Exit();
                 }
 
                 return false;
@@ -94,19 +77,16 @@ namespace Dolphin.Classes
                     dwClient = (int)current.BaseAddress;
                 }
             }
-            GetWindowRect(GameHandle, out WindowBounds);
-
             return true;
         }
 
         #endregion
 
         #region Misc Tab Stuff
-        public static bool 
+        public static bool
             IsEnabled_Noflash,
             IsEnabled_NoSmoke,
-            IsEnabled_BunnyHop,
-            IsEnabled_EnemyHPLabel;
+            IsEnabled_BunnyHop;
         #endregion
 
         #region Main Form Stuff
@@ -323,31 +303,12 @@ namespace Dolphin.Classes
                 "GLOW_RAINBOW_ENABLED_ENEMY=" + RainbowGlowEnabledOpposition + Environment.NewLine +
                 "GLOW_COLOR_BASED_ON_HP_ENEMY=" + HPToColourEnabledOpposition + Environment.NewLine +
                 "====ESP OPTIONS====" + Environment.NewLine +
-                "BOX_ESP_ENABLED_TEAM=" + BoxESPEnabledFriendly + Environment.NewLine +
-                "SKELETONS_ENABLED_TEAM=" + SkeletonsEnabledFriendly + Environment.NewLine +
-                "RAINBOW_BOX_ESP_ENABLED_TEAM=" + RainbowBoxESPEnabledFriendly + Environment.NewLine +
-                "RAINBOW_SKELETON_ESP_ENABLED_TEAM=" + RainbowSkeletonESPEnabledFriendly + Environment.NewLine +
-                "Box_ESP_TEAM_ARGB=" + BoxESPTeamARGB.ToArgb() + Environment.NewLine +
-                "Skeleton_ESP_TEAM_ARGB=" + SkeletonESPTeamARGB.ToArgb() + Environment.NewLine +
-                "BOX_ESP_ENABLED_ENEMY=" + BoxESPEnabledOpposition + Environment.NewLine +
-                "SKELETONS_ENABLED_ENEMY=" + SkeletonsEnabledOpposition + Environment.NewLine +
-                "RAINBOW_BOX_ESP_ENABLED_ENEMY=" + RainbowBoxESPEnabledOpposition + Environment.NewLine +
-                "RAINBOW_ENEMY_ESP_ENABLED_ENEMY=" + RainbowSkeletonESPEnabledOpposition + Environment.NewLine +
-                "Box_ESP_ENEMY_ARGB=" + BoxESPEnemyARGB.ToArgb() + Environment.NewLine +
-                "Skeleton_ESP_ENEMY_ARGB=" + SkeletonESPEnemyARGB.ToArgb() + Environment.NewLine +
                 "====RADAR OPTIONS====" + Environment.NewLine +
-                "RADAR_ENABLED=" + RadarEnabled + Environment.NewLine +
-                "RADAR_SIZE=" + RadarSize + Environment.NewLine +
-                "RADAR_BLIP_SIZE=" + RadarBlipSize + Environment.NewLine +
-                "RADAR_TOP_LEFT_X=" + RadarTopLeftPosition.X + Environment.NewLine +
-                "RADAR_TOP_LEFT_Y=" + RadarTopLeftPosition.Y + Environment.NewLine +
-                "RADAR_OPACITY=" + RadarOpacity + Environment.NewLine +
                 "====MISC OPTIONS====" + Environment.NewLine +
                 "NO_FLASH_ENABLED=" + IsEnabled_Noflash + Environment.NewLine +
                 "NO_SMOKE_ENABLED=" + IsEnabled_NoSmoke + Environment.NewLine +
                 "TRIGGERBOT_ENABLED=" + IsEnabled_TriggerBot + Environment.NewLine +
-                "BUNNYHOP_ENABLED=" + IsEnabled_BunnyHop + Environment.NewLine +
-                "ENEMY_HP_LABEL_ENABLED=" + IsEnabled_EnemyHPLabel + Environment.NewLine 
+                "BUNNYHOP_ENABLED=" + IsEnabled_BunnyHop + Environment.NewLine 
                 );
         }
 
@@ -381,36 +342,11 @@ namespace Dolphin.Classes
             RainbowGlowEnabledOpposition = bool.Parse(results[6]);
             HPToColourEnabledOpposition = bool.Parse(results[7]);
 
-            // team esp options
-            BoxESPEnabledFriendly = bool.Parse(results[8]);
-            SkeletonsEnabledFriendly = bool.Parse(results[9]);
-            RainbowBoxESPEnabledFriendly = bool.Parse(results[10]);
-            RainbowSkeletonESPEnabledFriendly = bool.Parse(results[11]);
-            BoxESPTeamARGB = System.Drawing.Color.FromArgb(int.Parse(results[12]));
-            SkeletonESPTeamARGB = System.Drawing.Color.FromArgb(int.Parse(results[13]));
-
-            // enemy esp options
-            BoxESPEnabledOpposition = bool.Parse(results[14]);
-            SkeletonsEnabledOpposition = bool.Parse(results[15]);
-            RainbowBoxESPEnabledOpposition = bool.Parse(results[16]);
-            RainbowSkeletonESPEnabledOpposition = bool.Parse(results[17]);
-            BoxESPEnemyARGB = System.Drawing.Color.FromArgb(int.Parse(results[18]));
-            SkeletonESPEnemyARGB = System.Drawing.Color.FromArgb(int.Parse(results[19]));
-
-            // radar options
-            RadarEnabled = bool.Parse(results[20]);
-            RadarSize = int.Parse(results[21]);
-            RadarBlipSize = int.Parse(results[22]);
-            RadarTopLeftPosition.X = float.Parse(results[23]);
-            RadarTopLeftPosition.Y = float.Parse(results[24]);
-            RadarOpacity = float.Parse(results[25]);
-
             // misc options
-            IsEnabled_Noflash = bool.Parse(results[26]);
-            IsEnabled_NoSmoke = bool.Parse(results[27]);
-            IsEnabled_TriggerBot = bool.Parse(results[28]);
-            IsEnabled_BunnyHop = bool.Parse(results[29]);
-            IsEnabled_EnemyHPLabel = bool.Parse(results[30]);
+            IsEnabled_Noflash = bool.Parse(results[8]);
+            IsEnabled_NoSmoke = bool.Parse(results[9]);
+            IsEnabled_TriggerBot = bool.Parse(results[10]);
+            IsEnabled_BunnyHop = bool.Parse(results[11]);
         }
 
         #endregion

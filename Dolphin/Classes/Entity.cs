@@ -5,7 +5,6 @@ using static hazedumper.netvars;
 using static hazedumper.signatures;
 
 using static Dolphin.Classes.GlobalVariables;
-using static Dolphin.Classes.Geometry;
 
 namespace Dolphin.Classes
 {
@@ -58,13 +57,6 @@ namespace Dolphin.Classes
                 return false;
             else
                 return true;
-        }
-        public SharpDX.Vector2 Entity_Position_W2S
-        {
-            get
-            {
-                return WorldToScreen(ViewMatrix, WindowSize, Entity_Position_3D);
-            }
         }
         public SharpDX.Vector3 Entity_Position_3D
         {
