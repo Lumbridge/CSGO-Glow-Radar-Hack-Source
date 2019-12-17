@@ -72,7 +72,7 @@ namespace Dolphin.Classes
                 {
                     dwEngine = (int)current.BaseAddress;
                 }
-                if (current.ModuleName == "client.dll")
+                if (current.ModuleName == "client_panorama.dll")
                 {
                     dwClient = (int)current.BaseAddress;
                 }
